@@ -1,7 +1,6 @@
-# CPU Documentation
+### ✅ Revisión sugerida (en inglés, estilo técnico claro)
 
-## Note
-This documentation is a work in progress and may change as the project evolves. Features, syntax, and behavior are subject to revision during development.
+# CPU Documentation
 
 ## Frame Timing
 The CPU operates at a configurable clock speed (default 3 MHz) and targets 60 FPS. The number of cycles per frame is calculated as:
@@ -36,6 +35,7 @@ For example:
 - `FILLRECT` (0x85): Fill rectangle using FRECT_X/Y/W/H (0xD80A-0xD80D)
 - `CIRCLE` (0x86): Draw circle using CIRC_X/Y/R (0xD80E-0xD810)
 - `FILLCIRCLE` (0x87): Fill circle using FCIRC_X/Y/R (0xD811-0xD813)
+- `RSTPAL` (0x88): Restore the Lu8 default palette (PICO-8 inspired)
 
 ### Frame Control
 - `VSYNC` (0xFE): Signal end of frame
@@ -125,6 +125,7 @@ For detailed PPU control register documentation, see MEMORY.md.
 | `RECTFILL` | 0x85   | Filled rectangle                | `RECTFILL` | 1  |
 | `CIRC`     | 0x86   | Outline circle                  | `CIRC` | 1      |
 | `CIRCFILL` | 0x87   | Filled circle                   | `CIRCFILL` | 1  |
+| `RSTPAL`   | 0x88   | Reset palette to Lu8 default      | `RSTPAL` | 1      |
 
 ## Execution Model
 

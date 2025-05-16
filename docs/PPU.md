@@ -2,9 +2,6 @@
 
 The Lu8 PPU (Picture Processing Unit) is a low-level, retro-inspired graphics renderer for the Lu8 Mini Console. It supports pixel-based drawing with primitives such as lines, rectangles, and circles. The system is memory-mapped and programmable in assembly.
 
-## Note
-This documentation is a work in progress and may change as the project evolves. Features, syntax, and behavior are subject to revision during development.
-
 ## Table of Contents
 
 * [Overview](#overview)
@@ -155,13 +152,46 @@ SETCOLOR              ; Apply it to PPU
 
 ## Palette Control
 
-### `setPalette(paletteArray)`
+The Lu8 PPU uses a 16-color palette, where each color is defined by 3 bytes: **Red**, **Green**, and **Blue**. The palette resides in memory at:
 
-Accepts a list of 16 HTML color strings (e.g., `"#FF0000"`) to define the rendering palette.
+```
+0xD850 – 0xD87F
+```
 
-### `defaultPalette()`
+Each palette index occupies 3 consecutive bytes:
 
-Returns an empty vector by default, but this can be overridden to include a predefined palette.
+| Index | Memory Range  | Components |
+| ----- | ------------- | ---------- |
+| 0     | 0xD850–0xD852 | R, G, B    |
+| 1     | 0xD853–0xD855 | R, G, B    |
+| ...   | ...           | ...        |
+| 15    | 0xD87D–0xD87F | R, G, B    |
+
+### Runtime Modification
+
+Colors can be changed at any time from assembly code:
+
+```asm
+; Set color 0 to red
+MOV [0xD850], 255   ; Red
+MOV [0xD851], 0     ; Green
+MOV [0xD852], 0     ; Blue
+```
+
+> ⚠️ All values must be in the range `0–255`. Use `MOD` if needed to limit dynamic values.
+
+### BIOS Default Palette
+
+On reset, the **BIOS initializes the palette** with the *Lu8 Default Palette*, inspired by PICO-8:
+
+```text
+"#000000", "#1D2B53", "#7E2553", "#008751",
+"#AB5236", "#5F574F", "#C2C3C7", "#FFF1E8",
+"#FF004D", "#FFA300", "#FFEC27", "#00E436",
+"#29ADFF", "#83769C", "#FF77A8", "#FFCCAA"
+```
+
+Programs are free to overwrite any palette entry as needed.
 
 ---
 

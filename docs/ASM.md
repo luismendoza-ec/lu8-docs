@@ -4,9 +4,6 @@
 
 The LU8 assembly language is a custom low-level language designed for the LU8 Virtual Machine. It offers a human-readable interface to the VM's bytecode instruction set, suitable for writing game logic, graphics commands, and control flow.
 
-## Note
-This documentation is a work in progress and may change as the project evolves. Features, syntax, and behavior are subject to revision during development.
-
 ---
 
 ## Instruction Set
@@ -314,6 +311,22 @@ This documentation is a work in progress and may change as the project evolves. 
   * `0xD812` (FCIRC_Y): Center Y
   * `0xD813` (FCIRC_R): Radius
 * **Cycles**: 1
+
+#### `RSTPAL` (0x88)
+
+* Restores the Lu8 default palette (inspired by PICO-8).
+* Resets all 16 palette colors to their original RGB values.
+* Useful when you want to undo runtime palette changes.
+* **Usage**: `RSTPAL`
+* **Cycles**: 1
+* **Note**: This affects rendering immediately.
+
+```asm
+; Example: Restore palette and clear screen
+RSTPAL
+MOV [0xD801], 0    ; Black background
+CLS
+```
 
 #### `VSYNC` (0xFE)
 

@@ -1,11 +1,12 @@
 # Lu8 Color Palette
 
-This is the official color palette used by the Lu8 fantasy console. It includes 16 fixed colors inspired by retro systems, presented as hexadecimal RGB values.
+This is the **default color palette** used by the Lu8 fantasy console, loaded by the BIOS on system reset. The palette consists of **16 programmatically changeable colors**, each defined by **3 RGB bytes** stored in memory.
 
-## Note
-This documentation is a work in progress and may change as the project evolves. Features, syntax, and behavior are subject to revision during development.
+---
 
-## Standard Palette (0–15)
+## Default Palette (0–15)
+
+This is the initial palette, known as the **Lu8 Default Palette**, inspired by PICO-8:
 
 | Index | Color Name  | Hex Code  |
 | ----- | ----------- | --------- |
@@ -26,45 +27,75 @@ This documentation is a work in progress and may change as the project evolves. 
 | 14    | Pink        | `#FF77A8` |
 | 15    | Peach       | `#FFCCAA` |
 
+---
+
+## Palette Memory Layout
+
+The current palette is stored in memory from:
+
+```
+0xD850 – 0xD87F
+```
+
+Each color occupies **3 bytes** in the order Red, Green, Blue. For example:
+
+| Color Index | Address Range     | Bytes   |
+| ----------- | ----------------- | ------- |
+| 0           | `0xD850`–`0xD852` | R, G, B |
+| 1           | `0xD853`–`0xD855` | R, G, B |
+| ...         | ...               | ...     |
+| 15          | `0xD87D`–`0xD87F` | R, G, B |
+
+You can write new RGB values at runtime using `MOV` or computed expressions.
+
+---
+
 ## Notes
 
-* This palette is fixed and defined in the VM source code:
+* The default palette is loaded by the BIOS at startup.
+* Programs can modify the palette by writing directly to `0xD850–0xD87F`.
+* Color values are 8-bit integers (0–255).
+* There is **no hidden palette**.
+* Color index `0` is typically treated as **transparent** in sprite systems (if applicable).
 
-  ```cpp
-  static const char* LU8_PALETTE[16] = {
-      "#000000", "#1D2B53", "#7E2553", "#008751",
-      "#AB5236", "#5F574F", "#C2C3C7", "#FFF1E8",
-      "#FF004D", "#FFA300", "#FFEC27", "#00E436",
-      "#29ADFF", "#83769C", "#FF77A8", "#FFCCAA"
-  };
-  ```
-* Colors are indexed (0–15) and used directly in graphics instructions via memory-mapped registers.
-* There is currently **no hidden palette**.
-* Color 0 is typically used as the transparent color by default.
+---
 
 ## Using Colors in ASM
 
-To select a color for drawing, you must write the desired color index (0–15) into the memory-mapped register `0xD800`, which corresponds to `PPU_COLOR`. Then you must invoke `SETCOLOR`.
+To draw with a specific color:
 
-To clear the screen (`CLS`), the background color must be written to register `0xD801` before calling `CLS`.
+1. Write the color index to `0xD800`
+2. Call the `SETCOLOR` instruction
 
-### Example (ASM):
+To clear the screen:
+
+1. Write the background color index to `0xD801`
+2. Call `CLS`
+
+### Example
 
 ```asm
-    ; Set background color to blue (index 12) and clear screen
-    MOV [0xD801], 12  ; Background color
-    CLS               ; Clear screen using that color
+    ; Set background to blue and clear
+    MOV [0xD801], 12
+    CLS
 
-    ; Set drawing color to red (index 8)
+    ; Set drawing color to red
     MOV [0xD800], 8
     SETCOLOR
 
-    ; Draw a red rectangle
-    MOV [0xD80A], 10  ; X position
-    MOV [0xD80B], 20  ; Y position
-    MOV [0xD80C], 5   ; Width
-    MOV [0xD80D], 5   ; Height
+    ; Draw a red box
+    MOV [0xD80A], 10
+    MOV [0xD80B], 20
+    MOV [0xD80C], 5
+    MOV [0xD80D], 5
     FILLRECT
 ```
 
-You can change the drawing color at any time before a draw instruction (e.g., `LINE`, `RECT`, `FILLRECT`, `PSET`, etc.) by updating `0xD800` and calling `SETCOLOR` again.
+### Changing Palette Color at Runtime
+
+```asm
+    ; Set color index 3 to RGB(100, 200, 50)
+    MOV [0xD859], 100   ; Red component (index 3 * 3 = 9 offset)
+    MOV [0xD85A], 200   ; Green
+    MOV [0xD85B], 50    ; Blue
+```

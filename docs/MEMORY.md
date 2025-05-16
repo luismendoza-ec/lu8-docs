@@ -4,9 +4,6 @@
 
 The LU8 memory system is organized into distinct sections, providing a structured approach to memory management and access.
 
-## Note
-This documentation is a work in progress and may change as the project evolves. Features, syntax, and behavior are subject to revision during development.
-
 ---
 
 ## Memory Layout
@@ -72,7 +69,7 @@ This documentation is a work in progress and may change as the project evolves. 
 | Screen Buffer             | `0xD000`-`0xD7FF` | 2KB     | Framebuffer output            |
 | Drawing Control Registers | `0xD800`-`0xD81F` | 32B     | PPU drawing command registers |
 | APU Channel Registers     | `0xD820`-`0xD84F` | 48B     | Audio channel configuration   |
-| Reserved Graphics Memory  | `0xD850`-`0xDFFF` | \~1760B | Reserved / Future use         |
+| Reserved Graphics Memory  | `0xD850`-`0xDFFF` | 1968B   | Color Palette (48B) + Reserved for future use |
 
 ---
 
@@ -164,6 +161,47 @@ This documentation is a work in progress and may change as the project evolves. 
 | `0xD812`        | `FCIRC_Y`   | Filled circle center Y            |
 | `0xD813`        | `FCIRC_R`   | Filled circle radius              |
 | `0xD814–0xD81F` | —           | Reserved for future extensions    |
+
+
+## 🎨 Color Palette Memory (0xD850–0xD87F)
+
+The LU8 system uses a 16-color fixed index palette (`0–15`). Each index can be dynamically modified at runtime via memory-mapped writes to this region.
+
+| Range         | Description                       |
+| ------------- | --------------------------------- |
+| `0xD850`      | Red component of color index 0    |
+| `0xD851`      | Green component of color index 0  |
+| `0xD852`      | Blue component of color index 0   |
+| `0xD853`      | Red component of color index 1    |
+| `0xD854`      | Green component of color index 1  |
+| `0xD855`      | Blue component of color index 1   |
+| ...           | ...                               |
+| `0xD88D`      | Red component of color index 15   |
+| `0xD88E`      | Green component of color index 15 |
+| `0xD88F`      | Blue component of color index 15  |
+
+### 📦 Total size: 48 bytes  
+Each color index is composed of 3 bytes: R (Red), G (Green), B (Blue).
+
+### 🧠 Usage Notes:
+- Writing to these addresses will immediately update the color used for that palette index.
+- Valid values per channel: `0x00–0xFF`
+- This allows the BIOS to load a default palette, and game cartridges to override it.
+
+### 💡 Example in ASM:
+```asm
+; Set palette index 3 to bright yellow (#FFFF00)
+MOV [0xD859], 255 ; Red
+MOV [0xD85A], 255 ; Green
+MOV [0xD85B], 0   ; Blue
+```
+
+The rest of the region from `0xD890–0xDFFF` (1920 bytes) remains reserved for future use, such as:
+
+- Additional palettes
+- Tilemap control
+- Scroll buffers
+- User-defined LUTs
 
 ---
 
