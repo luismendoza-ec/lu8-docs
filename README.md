@@ -2,7 +2,9 @@
 
 ![Lu8 Pong Screenshot](assets/images/lu8_pong.jpeg)
 
-**Lu8** is a fantasy virtual console built from scratch in **TypeScript/JavaScript**. Inspired by systems like the NES, PICO-8, and TIC-80, it simulates a retro 8-bit console that never existed — but could have. It includes its own VM, assembly language, and a full browser-based development environment.
+**Lu8** is a fantasy virtual console built from scratch in **C++**, with a web-based port in **TypeScript/JavaScript** for easier development and testing. Inspired by systems like the NES, PICO-8, and TIC-80, it simulates a retro 8-bit console that never existed — but could have. It includes its own VM, assembly language, and a full browser-based development environment.
+
+You can try the web version at: [https://try.lu8.dev](https://try.lu8.dev)
 
 ## About the Project
 
@@ -10,9 +12,9 @@ Hi, I'm Luis 👋
 
 I've always been fascinated by how games work behind the scenes. After years of building tools, games, and automation systems, I decided to go deeper: to create my own fantasy console — not an emulator, but a full ecosystem built from the ground up.
 
-**Lu8** is that project. It’s a custom virtual machine with its own instruction set, memory-mapped I/O, sound and video subsystems, and a BIOS bootloader. It runs `.lu8` ROMs written in its own low-level assembly language — and it all runs in the browser.
+**Lu8** is that project. It's a custom virtual machine with its own instruction set, memory-mapped I/O, sound and video subsystems, and a BIOS bootloader. It runs `.lu8` ROMs written in its own low-level assembly language — and it all runs in the browser.
 
-Today, Lu8 is more than a VM — it’s an **all-in-one environment**: you get a code editor, live memory and CPU monitor, integrated shell, and virtual screen, all in one place.
+Today, Lu8 is more than a VM — it's an **all-in-one environment**: you get a code editor, live memory and CPU monitor, integrated shell, and virtual screen, all in one place.
 
 ## Key Features
 
@@ -59,6 +61,28 @@ Today, Lu8 is more than a VM — it’s an **all-in-one environment**: you get a
   * Terminal/shell for live commands
   * Real-time RAM and CPU monitoring
   * Integrated VM screen output
+
+## Documentation
+
+To help you get started with Lu8, here's a structured guide to our documentation:
+
+### Core Components
+* [CPU](docs/CPU.md) - Understanding the CPU architecture and instruction set
+* [Memory](docs/MEMORY.md) - Memory model and RAM organization
+* [PPU](docs/PPU.md) - Graphics system and video output
+* [APU](docs/APU.md) - Audio processing and sound generation
+* [Input](docs/INPUT.md) - Controller input and key mapping
+
+### Development Tools
+* [Code Editor](docs/CODE-EDITOR.md) - Using the integrated development environment
+* [Terminal](docs/TERMINAL.md) - Working with the virtual console shell
+* [Monitor](docs/MONITOR.md) - Debugging and system monitoring
+
+### Programming
+* [Assembly](docs/ASM.md) - Lu8 assembly language reference
+* [ROM](docs/ROM.md) - Creating and loading ROM files
+* [BIOS](docs/BIOS.md) - System boot process and BIOS functions
+* [Palette](docs/PALETTE.md) - Color system and custom palettes
 
 ## Current Status
 
