@@ -218,6 +218,17 @@ The LU8 assembly language is a custom low-level language designed for the LU8 Vi
   ```
 * **Cycles**: 3
 
+#### `JLE` (0x23)
+
+* Jump if Less or Equal (`LF` is set **OR** `ZF` is set).
+* **Usage**: `JLE label`
+* **Example**:
+  ```asm
+  CMP [0x8000], [0x8001] ; Compare values
+  JLE less_or_equal      ; Jump if first value <= second value
+```
+* **Cycles**: 3
+
 ### Stack and Subroutine Instructions
 
 #### `CALL` (0x16)

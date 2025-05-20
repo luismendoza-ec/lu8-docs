@@ -66,8 +66,7 @@ wait_start:
     CLS
     
     ; Set drawing color
-    MOV [0xD800], 7
-    SETCOLOR
+    SETCOLOR 7
     
     ; Draw left paddle (P1)
     MOV [0xD80A], P1_X
@@ -305,8 +304,7 @@ main:
 
 ; --- Draw everything ---
 .draw:
-    MOV [0xD800], 7
-    SETCOLOR
+    SETCOLOR 7
 
     ; Draw P1 paddle
     MOV [0xD80A], P1_X

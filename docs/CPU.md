@@ -37,6 +37,7 @@ For example:
 - `JG addr` (0x0C): Jump if Greater Flag is set
 - `JL addr` (0x0D): Jump if Less Flag is set
 - `JGE addr` (0x20): Jump if Greater or Equal (GF or ZF)
+- `JLE addr` (0x23): Jump if Less or Equal (LF or ZF)
 
 ### Memory Operations
 - `MOV [dest], src` (0x01): Move value from source to destination
