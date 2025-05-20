@@ -1,6 +1,6 @@
 # Lu8 - A Fantasy Retro Virtual Console
 
-![Lu8 Pong Screenshot](assets/images/lu8_pong.jpeg)
+![Lu8 Pong Screenshot](assets/images/try-lu8.png)
 
 **Lu8** is a fantasy virtual console built from scratch in **C++**, with a web-based port in **TypeScript/JavaScript** for easier development and testing. Inspired by systems like the NES, PICO-8, and TIC-80, it simulates a retro 8-bit console that never existed — but could have. It includes its own VM, assembly language, and a full browser-based development environment.
 
