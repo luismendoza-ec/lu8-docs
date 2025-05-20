@@ -77,6 +77,7 @@ To help you get started with Lu8, here's a structured guide to our documentation
 * [Code Editor](docs/CODE-EDITOR.md) - Using the integrated development environment
 * [Terminal](docs/TERMINAL.md) - Working with the virtual console shell
 * [Monitor](docs/MONITOR.md) - Debugging and system monitoring
+* [Hex-Dump](docs/HEX-DUMP.md) - Inspect the hexadecimal data of a loaded cartridge
 
 ### Programming
 * [Assembly](docs/ASM.md) - Lu8 assembly language reference
