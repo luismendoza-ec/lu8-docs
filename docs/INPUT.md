@@ -1,10 +1,21 @@
+# Author and License
+
+**Author**: Luis A. Mendoza - Creator of Lu8
+
+This documentation is part of the Lu8 Fantasy Console project. While this documentation serves as a reference for the current implementation and capabilities, please note that the project is under active and continuous development, and the documentation may change accordingly.
+
+## License and Copyright
+
+© 2024 Luis A. Mendoza. All rights reserved.
+
+This documentation and the Lu8 Fantasy Console are original works created by Luis A. Mendoza. The Lu8 system is a fictional console design and implementation that does not correspond to any existing hardware or other projects. This is a closed-source project, and all rights to the design, implementation, and documentation are reserved.
+
+---
+
 # Lu8 Input System Documentation
 
 ## Overview
 The Lu8 Input System is designed to mimic the NES (Nintendo Entertainment System) controller functionality, providing support for two players with a familiar input interface for retro-style games and applications.
-
-## Note
-This documentation is a work in progress and may change as the project evolves. Features, syntax, and behavior are subject to revision during development.
 
 ## Hardware Emulation
 The system emulates two 8-bit input registers similar to the NES controller, where each bit represents a specific button state for each player:
@@ -71,13 +82,13 @@ Player 1 Controls:                    Player 2 Controls:
 #### Player 1
 | Console Button | Keyboard Key | Description                    |
 |---------------|--------------|--------------------------------|
-| D-Pad Up      | ↑ (Up)      | Move up/Navigate up            |
-| D-Pad Down    | ↓ (Down)    | Move down/Navigate down        |
-| D-Pad Left    | ← (Left)    | Move left/Navigate left        |
-| D-Pad Right   | → (Right)   | Move right/Navigate right      |
+| D-Pad Up      | ArrowUp     | Move up/Navigate up            |
+| D-Pad Down    | ArrowDown   | Move down/Navigate down        |
+| D-Pad Left    | ArrowLeft   | Move left/Navigate left        |
+| D-Pad Right   | ArrowRight  | Move right/Navigate right      |
 | A Button      | Z           | Primary action/Confirm         |
 | B Button      | X           | Secondary action/Cancel        |
-| Select        | Right Shift | Open menu/Secondary menu       |
+| Select        | ShiftRight  | Open menu/Secondary menu       |
 | Start         | Enter       | Pause/Start/Menu confirmation  |
 
 #### Player 2
@@ -89,7 +100,7 @@ Player 1 Controls:                    Player 2 Controls:
 | D-Pad Right   | D           | Move right/Navigate right      |
 | A Button      | F           | Primary action/Confirm         |
 | B Button      | G           | Secondary action/Cancel        |
-| Select        | Left Shift  | Open menu/Secondary menu       |
+| Select        | ShiftLeft   | Open menu/Secondary menu       |
 | Start         | T           | Pause/Start/Menu confirmation  |
 
 ### Notes
@@ -99,6 +110,8 @@ Player 1 Controls:                    Player 2 Controls:
 - Select/Start buttons are positioned to avoid accidental presses
 - All keys can be pressed simultaneously for complex inputs
 - The layout is designed to allow comfortable two-player gameplay on a single keyboard
+- Input states are updated every frame
+- Button states are automatically cleared on system reset
 
 ## Assembly Usage Examples
 
@@ -110,14 +123,14 @@ Player 1 Controls:                    Player 2 Controls:
     
     ; Check Player 1 A button
     MOV [0x8002], [0x8000]
-    AND [0x8002], 0xFE01      ; Mask for A button
-    CMP [0x8002], 0xFE01      ; Compare with A button mask
+    AND [0x8002], 0x01      ; Mask for A button
+    CMP [0x8002], 0x01      ; Compare with A button mask
     JZ .p1_a_pressed
     
     ; Check Player 2 A button
     MOV [0x8002], [0x8001]
-    AND [0x8002], 0xFE01      ; Mask for A button
-    CMP [0x8002], 0xFE01      ; Compare with A button mask
+    AND [0x8002], 0x01      ; Mask for A button
+    CMP [0x8002], 0x01      ; Compare with A button mask
     JZ .p2_a_pressed
 ```
 
@@ -128,15 +141,15 @@ Player 1 Controls:                    Player 2 Controls:
     ; Player 1 movement
     MOV [0x8000], [0xFF10]    ; Read P1 input
     MOV [0x8001], [0x8000]
-    AND [0x8001], 0xFE80      ; RIGHT mask
-    CMP [0x8001], 0xFE80
+    AND [0x8001], 0x80      ; RIGHT mask
+    CMP [0x8001], 0x80
     JZ .move_p1_right
     
     ; Player 2 movement
     MOV [0x8002], [0xFF11]    ; Read P2 input
     MOV [0x8003], [0x8002]
-    AND [0x8003], 0xFE80      ; RIGHT mask
-    CMP [0x8003], 0xFE80
+    AND [0x8003], 0x80      ; RIGHT mask
+    CMP [0x8003], 0x80
     JZ .move_p2_right
     
     ; Continue checking other directions...
@@ -197,6 +210,8 @@ Player 1 Controls:                    Player 2 Controls:
 - Input states are updated every frame
 - Multiple buttons can be pressed simultaneously per player
 - Button states are automatically cleared on system reset
+- Input handling is synchronized with the frame rate (60 FPS)
+- Input events are captured only when the canvas has focus
 
 ## Limitations
 
@@ -204,4 +219,6 @@ Player 1 Controls:                    Player 2 Controls:
 - No analog input support
 - No input buffering at the hardware level
 - 8 buttons per player maximum due to 8-bit register limitation
-- No support for additional controller types 
+- No support for additional controller types
+- Input is only captured when the canvas has focus
+- No support for gamepad/controller input 

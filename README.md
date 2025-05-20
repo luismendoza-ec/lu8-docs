@@ -2,101 +2,112 @@
 
 ![Lu8 Pong Screenshot](assets/images/lu8_pong.jpeg)
 
-Lu8 is a fantasy virtual console I've been building from scratch in C++. It's designed to emulate the feel of an 8-bit homebrew system that never actually existed — but could have. It features a custom VM, a low-level assembly language, and memory-mapped graphics/audio subsystems.
+**Lu8** is a fantasy virtual console built from scratch in **TypeScript/JavaScript**. Inspired by systems like the NES, PICO-8, and TIC-80, it simulates a retro 8-bit console that never existed — but could have. It includes its own VM, assembly language, and a full browser-based development environment.
 
 ## About the Project
 
 Hi, I'm Luis 👋
 
-Ever since I was a kid, I've been fascinated by how video games work. That curiosity — digging through game files, trying to understand how everything fit together — was the spark that ignited my journey into programming.
+I've always been fascinated by how games work behind the scenes. After years of building tools, games, and automation systems, I decided to go deeper: to create my own fantasy console — not an emulator, but a full ecosystem built from the ground up.
 
-After many years building all kinds of tools, apps, games, and systems, I felt called back to the origins: game development. But this time, I went deeper — I challenged myself to build my own console.
+**Lu8** is that project. It’s a custom virtual machine with its own instruction set, memory-mapped I/O, sound and video subsystems, and a BIOS bootloader. It runs `.lu8` ROMs written in its own low-level assembly language — and it all runs in the browser.
 
-Lu8 is my answer to that challenge. It's not an emulator — it's a contained platform that simulates a retro console with its own ecosystem: CPU, RAM, APU, PPU, BIOS, and a handcrafted assembly language.
+Today, Lu8 is more than a VM — it’s an **all-in-one environment**: you get a code editor, live memory and CPU monitor, integrated shell, and virtual screen, all in one place.
 
 ## Key Features
 
 * **Custom CPU**
 
-  * 8-bit instructions, memory-mapped architecture
-  * Instructions: MOV, ADD, SUB, MUL, DIV, AND, OR, JMP, CMP, etc.
-  * Call stack support (CALL, RET)
-  * Software-based registers (all data in RAM)
+  * 8-bit instruction set, memory-mapped architecture
+  * Core instructions: MOV, ADD, SUB, MUL, DIV, CMP, JMP, CALL, RET, etc.
+  * All data operations performed directly in RAM
 
 * **APU (Audio Processing Unit)**
 
-  * Inspired by the NES sound chip
-  * 5 channels: 2 Pulse, Triangle, Noise, and DMC
-  * Volume envelope, duty cycle, sweep, frequency, loop modes
+  * Inspired by the NES sound system
+  * 4+ channels with pulse, noise, and other waveforms
+  * Realtime control via memory-mapped audio registers
 
 * **PPU (Picture Processing Unit)**
 
-  * 128x128 resolution, 16-color palette
-  * Pixel, line, rectangle, circle drawing primitives
-  * Direct VRAM access with memory-mapped registers
+  * 128x128 resolution
+  * 16-color palette with support for custom palettes
+  * Drawing primitives: pixels, lines, rectangles, circles, characters
+  * Memory-mapped VRAM access
 
 * **Memory Model**
 
-  * 64KB total RAM
-  * BIOS, Program Code, Data, Graphics, Stack, I/O registers
-  * VRAM and Audio mapped to specific memory regions
+  * 64KB total addressable memory
+  * Sections for BIOS, ROM, data, graphics, stack, I/O
+  * VRAM and APU mapped into fixed regions
 
 * **Input System**
 
-  * 2-player support with NES-style controller layout
-  * Memory-mapped input registers
-  * Fully documented key bindings
+  * NES-style controller layout for 2 players
+  * Key bindings mapped to memory registers
+  * Real-time polling from VM
 
 * **Assembler**
 
-  * Two-pass label resolution
-  * Support for constants, labels, comments
-  * Generates `.room` binary format with custom header
+  * Custom Lu8 ASM with support for labels, constants, comments
+  * Two-pass label resolution and memory validation
+  * Outputs `.lu8` binary format with custom header
 
-* **Execution**
+* **Integrated Development Environment**
 
-  * Clocked at 2 MHz
-  * 60 FPS sync
-  * Supports `VSYNC`, `HALT`, `LOG`, and more
+  * Web-based code editor
+  * Terminal/shell for live commands
+  * Real-time RAM and CPU monitoring
+  * Integrated VM screen output
 
 ## Current Status
 
-Lu8 is still in **very early development**, but it's functional. I've built a BIOS bootloader, run simple games (like Pong), and implemented a working audio engine with real-time channel control.
+Lu8 is already functional and actively growing. You can boot into a BIOS, write and run programs in Lu8 Assembly, build games like **Pong**, and hear sound via a real APU. The environment includes a live code editor, virtual shell, and debugging tools.
 
-I'm currently writing extensive documentation for developers who might want to write games in Lu8 Assembly. If you're curious or want to test early, stay tuned.
+The project is still under heavy development, but its foundation is solid and extensible.
 
 ## Roadmap
 
-* [x] VM, CPU, RAM system
-* [x] PPU with drawing primitives
-* [x] APU with 5 audio channels
-* [x] Input system
-* [x] BIOS and program boot
-* [x] `.room` binary format
-* [ ] Lua high-level language transpiler
-* [ ] Sprite/tile editor
-* [ ] IDE integration / devtools
-* [ ] Discord or dev community
-* [ ] Web-based sandbox player
+### ✅ Done
+
+* VM, CPU, and full RAM system
+* PPU with basic drawing support
+* APU with 4+ sound channels
+* Input system and key mapping
+* BIOS and `.lu8` ROM boot
+* All-in-One Environment (editor, shell, monitoring)
+
+### 🔧 In Progress / Planned
+
+* Improve BIOS behavior and boot sequence
+* Font rendering and character support
+* APU improvements (envelopes, better channel control)
+* View generated binary hex output
+* Better fullscreen mode for Lu8 VM
+* Enhanced CPU % usage calculation
+* More .ASM examples and demos
+* UI/UX improvements for the dev environment
+* IDE/editor enhancements
+* Community features (Discord, docs, etc.)
+
+…and more, based on time and feedback.
 
 ## How to Follow
 
-Right now, the project is private but I may open up early builds for testers. You can:
+Currently, the project is private. If you're interested in testing or contributing, keep an eye on:
 
-* Watch this repo for updates
-* Follow me on [Reddit](https://www.reddit.com/user/mrefactor/) (fantasyconsoles / emudev)
-* (Coming soon) Discord for project updates and community chat
+* My [Reddit](https://www.reddit.com/user/mrefactor/) (fantasy consoles, emudev)
+* (Soon) Discord for testers and dev discussions
 
-Thanks for reading — and if you’re building something cool too, keep going. The process itself is the reward.
+Feel free to reach out if you're building something similar or just curious about virtual consoles!
 
 — Luis
 
 ## License
 
-Lu8 is currently a closed-source project.
-While the source code is not public at this time, I may open early builds to testers in the future.
-Stay tuned for updates and feel free to reach out if you're curious or want to help shape the direction of this console.
+**Lu8 is currently closed-source.**
+Early builds may be shared for feedback and testing. Stay tuned for updates.
 
 ---
 
-> *Lu8 is a passion project. It draws inspiration from PICO-8, TIC-80, NES, and other fantasy/hardware consoles, but follows its own philosophy and architecture.*
+> *Lu8 is a retro computing dream brought to life — not an emulator of the past, but a vision of what could have been.*

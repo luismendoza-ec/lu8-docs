@@ -1,10 +1,21 @@
+# Author and License
+
+**Author**: Luis A. Mendoza - Creator of Lu8
+
+This documentation is part of the Lu8 Fantasy Console project. While this documentation serves as a reference for the current implementation and capabilities, please note that the project is under active and continuous development, and the documentation may change accordingly.
+
+## License and Copyright
+
+© 2024 Luis A. Mendoza. All rights reserved.
+
+This documentation and the Lu8 Fantasy Console are original works created by Luis A. Mendoza. The Lu8 system is a fictional console design and implementation that does not correspond to any existing hardware or other projects. This is a closed-source project, and all rights to the design, implementation, and documentation are reserved.
+
+---
+
 # Lu8 ROM Format Specification
 
 ## Overview
 The `.lu8` file format is the binary format used by the Lu8 virtual machine to store compiled programs. It consists of a header followed by the program's binary data.
-
-## Note
-This documentation is a work in progress and may change as the project evolves. Features, syntax, and behavior are subject to revision during development.
 
 ## Magic Number (0x1B)
 Every valid Lu8 ROM must start with the magic number `0x1B` (27 in decimal). This number has special significance as it represents:
@@ -47,7 +58,7 @@ The header is a 9-byte structure with the following layout:
 - VM will reject files with unsupported versions
 
 #### Size (2 bytes, little-endian)
-- Maximum program size: 65,535 bytes
+- Maximum program size: 28KB (0x7000 bytes)
 - Represents the exact size of the program data following the header
 - Used for validation and memory allocation
 
@@ -66,7 +77,7 @@ The header is a 9-byte structure with the following layout:
 - Size must match the value in the header
 - Format is raw binary, ready to be loaded into VM memory
 - Programs are loaded at 0x1000 (after BIOS region)
-- Maximum program size is limited to available memory (28KB)
+- Maximum program size is limited to 28KB (0x1000-0x7FFF)
 
 ## Memory Layout
 When a .lu8 file is loaded:
@@ -116,7 +127,7 @@ The BIOS is a critical component that:
 ### Loading a .lu8 File
 1. Verify BIOS is loaded and valid
 2. Read and verify .lu8 header
-3. Check program size fits in available memory
+3. Check program size fits in available memory (28KB)
 4. Load program starting at 0x1000
 5. Initialize program execution
 6. Enforce memory protection

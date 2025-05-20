@@ -1,3 +1,17 @@
+# Author and License
+
+**Author**: Luis A. Mendoza - Creator of Lu8
+
+This documentation is part of the Lu8 Fantasy Console project. While this documentation serves as a reference for the current implementation and capabilities, please note that the project is under active and continuous development, and the documentation may change accordingly.
+
+## License and Copyright
+
+© 2024 Luis A. Mendoza. All rights reserved.
+
+This documentation and the Lu8 Fantasy Console are original works created by Luis A. Mendoza. The Lu8 system is a fictional console design and implementation that does not correspond to any existing hardware or other projects. This is a closed-source project, and all rights to the design, implementation, and documentation are reserved.
+
+---
+
 # Lu8 Color Palette
 
 This is the **default color palette** used by the Lu8 fantasy console, loaded by the BIOS on system reset. The palette consists of **16 programmatically changeable colors**, each defined by **3 RGB bytes** stored in memory.
@@ -34,7 +48,7 @@ This is the initial palette, known as the **Lu8 Default Palette**, inspired by P
 The current palette is stored in memory from:
 
 ```
-0xD850 – 0xD87F
+0xD850 – 0xD88F
 ```
 
 Each color occupies **3 bytes** in the order Red, Green, Blue. For example:
@@ -44,7 +58,7 @@ Each color occupies **3 bytes** in the order Red, Green, Blue. For example:
 | 0           | `0xD850`–`0xD852` | R, G, B |
 | 1           | `0xD853`–`0xD855` | R, G, B |
 | ...         | ...               | ...     |
-| 15          | `0xD87D`–`0xD87F` | R, G, B |
+| 15          | `0xD87D`–`0xD88F` | R, G, B |
 
 You can write new RGB values at runtime using `MOV` or computed expressions.
 
@@ -53,7 +67,7 @@ You can write new RGB values at runtime using `MOV` or computed expressions.
 ## Notes
 
 * The default palette is loaded by the BIOS at startup.
-* Programs can modify the palette by writing directly to `0xD850–0xD87F`.
+* Programs can modify the palette by writing directly to `0xD850–0xD88F`.
 * Color values are 8-bit integers (0–255).
 * There is **no hidden palette**.
 * Color index `0` is typically treated as **transparent** in sprite systems (if applicable).
@@ -62,10 +76,10 @@ You can write new RGB values at runtime using `MOV` or computed expressions.
 
 ## Using Colors in ASM
 
-To draw with a specific color:
+To draw with a specific color, use `SETCOLOR` with an immediate or memory-based value:
 
-1. Write the color index to `0xD800`
-2. Call the `SETCOLOR` instruction
+1. Set the color using `SETCOLOR <value>` or `SETCOLOR [addr]`
+2. Then use drawing instructions like `PSET`, `RECT`, etc.
 
 To clear the screen:
 
@@ -75,13 +89,12 @@ To clear the screen:
 ### Example
 
 ```asm
-    ; Set background to blue and clear
+    ; Set background to blue and clear screen
     MOV [0xD801], 12
     CLS
 
     ; Set drawing color to red
-    MOV [0xD800], 8
-    SETCOLOR
+    SETCOLOR 8
 
     ; Draw a red box
     MOV [0xD80A], 10
@@ -89,6 +102,9 @@ To clear the screen:
     MOV [0xD80C], 5
     MOV [0xD80D], 5
     FILLRECT
+
+    HALT ; Stops the program
+
 ```
 
 ### Changing Palette Color at Runtime

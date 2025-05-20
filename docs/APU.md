@@ -1,9 +1,20 @@
+# Author and License
+
+**Author**: Luis A. Mendoza - Creator of Lu8
+
+This documentation is part of the Lu8 Fantasy Console project. While this documentation serves as a reference for the current implementation and capabilities, please note that the project is under active and continuous development, and the documentation may change accordingly.
+
+## License and Copyright
+
+© 2024 Luis A. Mendoza. All rights reserved.
+
+This documentation and the Lu8 Fantasy Console are original works created by Luis A. Mendoza. The Lu8 system is a fictional console design and implementation that does not correspond to any existing hardware or other projects. This is a closed-source project, and all rights to the design, implementation, and documentation are reserved.
+
+---
+
 # Lu8 Audio Processing Unit (APU) Documentation
 
 The Lu8 APU is inspired by the NES sound chip, featuring 5 audio channels with distinct characteristics for creating music and sound effects.
-
-## Note
-This documentation is a work in progress and may change as the project evolves. Features, syntax, and behavior are subject to revision during development.
 
 ## Table of Contents
 - [Channel Overview](#channel-overview)
@@ -54,6 +65,9 @@ The APU occupies memory addresses from `0xD820` to `0xD8AF`. Each channel has 16
 | 6      | LENGTH    | Sound length                   | All           |
 | 7      | PHASE     | Phase                          | All           |
 | 8      | DMC_DATA  | Sample data                    | DMC only      |
+| 9      | DMC_RATE  | Playback rate                  | DMC only      |
+| 10     | DMC_LOOP  | Loop control                   | DMC only      |
+| 11-15  | RESERVED  | Reserved for future use        | All           |
 
 ## Channel Details
 
@@ -415,8 +429,9 @@ LENGTH  = 0xD856      ; Sound length
 
 ### DMC Channel (0xD860-0xD86F)
 ```
-CTRL    = 0xD860      ; %000000LC
+CTRL    = 0xD860      ; %000000LC (L=Loop, C=Channel Enable)
 DATA    = 0xD868      ; Sample data
 RATE    = 0xD869      ; Playback rate
 LOOP    = 0xD86A      ; Loop control
+RESERVED = 0xD86B-0xD86F ; Reserved for future use
 ```

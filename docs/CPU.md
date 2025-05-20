@@ -1,4 +1,16 @@
-### ✅ Revisión sugerida (en inglés, estilo técnico claro)
+# Author and License
+
+**Author**: Luis A. Mendoza - Creator of Lu8
+
+This documentation is part of the Lu8 Fantasy Console project. While this documentation serves as a reference for the current implementation and capabilities, please note that the project is under active and continuous development, and the documentation may change accordingly.
+
+## License and Copyright
+
+© 2024 Luis A. Mendoza. All rights reserved.
+
+This documentation and the Lu8 Fantasy Console are original works created by Luis A. Mendoza. The Lu8 system is a fictional console design and implementation that does not correspond to any existing hardware or other projects. This is a closed-source project, and all rights to the design, implementation, and documentation are reserved.
+
+---
 
 # CPU Documentation
 
@@ -19,26 +31,58 @@ For example:
 - `NOP` (0x00): No operation
 - `JMP addr` (0x04): Jump to address
 - `JNZ addr` (0x06): Jump to address if last comparison was not zero
+- `JZ addr` (0x09): Jump to address if Zero Flag is set
+- `JEQ addr` (0x0A): Alias for JZ
+- `JNEQ addr` (0x0B): Jump if Zero Flag is clear
+- `JG addr` (0x0C): Jump if Greater Flag is set
+- `JL addr` (0x0D): Jump if Less Flag is set
+- `JGE addr` (0x20): Jump if Greater or Equal (GF or ZF)
 
 ### Memory Operations
 - `MOV [dest], src` (0x01): Move value from source to destination
 - `ADD [dest], src` (0x02): Add source to destination
 - `SUB [dest], src` (0x03): Subtract source from destination
 - `CMP a, b` (0x05): Compare two values, sets flags (ZF, GF, LF)
+- `INC [addr]` (0x07): Increment value at address
+- `DEC [addr]` (0x08): Decrement value at address
+- `MUL [dest], src` (0x0E): Multiply destination by source
+- `DIV [dest], src` (0x0F): Divide destination by source
+- `MOD [dest], src` (0x1D): Modulo of destination by source
+- `AND [dest], src` (0x10): Bitwise AND
+- `OR [dest], src` (0x11): Bitwise OR
+- `XOR [dest], src` (0x12): Bitwise XOR
+- `NOT [dest]` (0x13): Bitwise NOT
+- `SHL [dest], src` (0x14): Shift left (0-7 bits)
+- `SHR [dest], src` (0x15): Shift right (0-7 bits)
+- `MEMCPY [dest], [src], len` (0x1F): Copy memory block
+- `MEMSET [dest], value, len` (0x22): Set memory block
+
+### Stack Operations
+- `CALL addr` (0x16): Call subroutine
+- `RET` (0x17): Return from subroutine
+- `PUSH [addr]` (0x18): Push value to stack
+- `POP [addr]` (0x19): Pop value from stack
+
+### System Operations
+- `RND [dest]` (0x21): Write random number (0-255)
+- `TICK [dest]` (0x1C): Write system tick count
+- `LOG [addr]` (0x1E): Log value for debugging
 
 ### Graphics (Using PPU Control Registers 0xD800-0xD81F)
 - `PSET` (0x80): Draw pixel using RECT_X (0xD806), RECT_Y (0xD807)
 - `CLS` (0x81): Clear screen using PPU_BGCLR (0xD801)
-- `SETCOLOR` (0x82): Set drawing color from PPU_COLOR (0xD800)
+- `SETCOLOR` (0x82): Set drawing color to PPU_COLOR (0xD800)
 - `LINE` (0x83): Draw line using LINE_X1/Y1/X2/Y2 (0xD802-0xD805)
 - `RECT` (0x84): Draw rectangle using RECT_X/Y/W/H (0xD806-0xD809)
 - `FILLRECT` (0x85): Fill rectangle using FRECT_X/Y/W/H (0xD80A-0xD80D)
 - `CIRCLE` (0x86): Draw circle using CIRC_X/Y/R (0xD80E-0xD810)
 - `FILLCIRCLE` (0x87): Fill circle using FCIRC_X/Y/R (0xD811-0xD813)
 - `RSTPAL` (0x88): Restore the Lu8 default palette (PICO-8 inspired)
+- `DRAWCHAR` (0x89): Draw character from font data
 
 ### Frame Control
 - `VSYNC` (0xFE): Signal end of frame
+- `HALT` (0xFF): Stop CPU execution
 
 ## Memory Map
 - 0x0000-0x0FFF: BIOS code (4KB, read/execute only)
@@ -64,79 +108,16 @@ Any value in the range `0xFE00`–`0xFEFF` is treated as an 8-bit **immediate co
 - Example: `MOV [0x8000], 0xFE05` stores the constant `5` into memory
 - In contrast: `MOV [0x8000], [0x8005]` copies a value from memory
 
-For detailed PPU control register documentation, see MEMORY.md.
-
-### Basic Instructions
-
-| Mnemonic | Opcode | Description                         | Format                            | Cycles |
-|----------|--------|-------------------------------------|-----------------------------------|--------|
-| `NOP`    | 0x00   | No operation                        | `NOP`                             | 1      |
-| `MOV`    | 0x01   | Move `[src]` or `immediate` → `[dest]` | `MOV [dest], [src]` / `MOV [dest], 42` | 5 |
-| `ADD`    | 0x02   | Add `[src]` to `[dest]`             | `ADD [dest], [src]`               | 5      |
-| `SUB`    | 0x03   | Subtract `[src]` from `[dest]`      | `SUB [dest], [src]`               | 5      |
-| `MUL`    | 0x0E   | Multiply `[dest]` by `[src]`        | `MUL [dest], [src]`               | 5      |
-| `DIV`    | 0x0F   | Divide `[dest]` by `[src]`          | `DIV [dest], [src]`               | 5      |
-| `MOD`    | 0x1D   | Modulo of `[dest]` by `[src]`       | `MOD [dest], [src]`               | 5      |
-| `AND`    | 0x10   | Bitwise AND `[src]` with `[dest]`   | `AND [dest], [src]`               | 5      |
-| `OR`     | 0x11   | Bitwise OR `[src]` with `[dest]`    | `OR [dest], [src]`                | 5      |
-| `XOR`    | 0x12   | Bitwise XOR `[src]` with `[dest]`   | `XOR [dest], [src]`               | 5      |
-| `NOT`    | 0x13   | Bitwise NOT of `[dest]`             | `NOT [dest]`                      | 3      |
-| `SHL`    | 0x14   | Shift `[dest]` left by `[src]` bits | `SHL [dest], [src]`               | 5      |
-| `SHR`    | 0x15   | Shift `[dest]` right by `[src]` bits| `SHR [dest], [src]`               | 5      |
-| `RND`    | 0x1B   | Write random number to `[dest]`     | `RND [dest]`                      | 3      |
-| `TICK`   | 0x1C   | Write system tick to `[dest]`       | `TICK [dest]`                     | 3      |
-| `LOG`    | 0x1E   | Output value at `[addr]` to logger  | `LOG [addr]`                      | 3      |
-| `INC`    | 0x07   | Increment value at `[addr]` by 1    | `INC [addr]`                      | 3      |
-| `DEC`    | 0x08   | Decrement value at `[addr]` by 1    | `DEC [addr]`                      | 3      |
-| `JZ`     | 0x09   | Jump if Zero Flag is set            | `JZ addr`                         | 3      |
-| `JEQ`    | 0x0A   | Alias for JZ                        | `JEQ addr`                        | 3      |
-| `JNEQ`   | 0x0B   | Jump if ZF is clear                 | `JNEQ addr`                       | 3      |
-| `JG`     | 0x0C   | Jump if Greater Flag is set         | `JG addr`                         | 3      |
-| `JL`     | 0x0D   | Jump if Less Flag is set            | `JL addr`                         | 3      |
-| `JGE`    | 0x20   | Jump if Greater or Equal            | `JGE addr`                        | 3      |
-| `CALL`   | 0x16   | Call subroutine (push PC, jump)       | `CALL addr`                        | 5      |
-| `RET`    | 0x17   | Return from subroutine                | `RET`                              | 5      |
-| `PUSH`   | 0x18   | Push value at `[src]` to stack        | `PUSH [src]`                       | 3      |
-| `POP`    | 0x19   | Pop stack into `[dest]`               | `POP [dest]`                       | 3      |
-| `MEMCPY` | 0x1F   | Copy N bytes from `[src]` to `[dest]` | `MEMCPY [dest], [src], len`        | 10+N   |
-| `HLT`    | 0xFF   | Halt execution until reset            | `HLT`                              | 1      |
-
-### Control Flow
-
-| Mnemonic | Opcode | Description                     | Format       | Cycles |
-|----------|--------|---------------------------------|--------------|--------|
-| `JMP`    | 0x04   | Jump unconditionally            | `JMP label`  | 3      |
-| `CMP`    | 0x05   | Compare `[a]` and `[b]`, set ZF | `CMP [a], [b]` | 5    |
-| `JNZ`    | 0x06   | Jump if Zero Flag is not set    | `JNZ label`  | 3      |
-| `JGE`    | 0x20   | Jump if Greater or Equal (GF or ZF) | `JGE label` | 3    |
-| `CALL`   | 0x16   | Call subroutine, push PC              | `CALL addr`   | 5 |
-| `RET`    | 0x17   | Return from subroutine (pop PC)       | `RET`         | 5 |
-| `HLT`    | 0xFF   | Halt CPU execution                    | `HLT`         | 1 |
-
-### Graphics Operations (PPU mapped)
-
-| Mnemonic   | Opcode | Description                    | Format  | Cycles |
-|------------|--------|--------------------------------|---------|--------|
-| `PSET`     | 0x80   | Plot pixel at `[0x8000],[0x8001]` | `PSET` | 1      |
-| `CLS`      | 0x81   | Clear screen (black or `[0x8004]`) | `CLS` | 1      |
-| `COLOR`    | 0x82   | Set draw color from `[0xFF04]`   | `COLOR`| 1      |
-| `LINE`     | 0x83   | Line from `[0xFF05]-[0xFF08]`    | `LINE` | 1      |
-| `RECT`     | 0x84   | Outline rectangle               | `RECT` | 1      |
-| `RECTFILL` | 0x85   | Filled rectangle                | `RECTFILL` | 1  |
-| `CIRC`     | 0x86   | Outline circle                  | `CIRC` | 1      |
-| `CIRCFILL` | 0x87   | Filled circle                   | `CIRCFILL` | 1  |
-| `RSTPAL`   | 0x88   | Reset palette to Lu8 default      | `RSTPAL` | 1      |
-
 ## Execution Model
 
 - **Fixed time step**: 60 frames per second
-- **Clock speed**: 2 MHz
-- **Cycles per frame**: 33,333
+- **Clock speed**: Configurable (default 3 MHz)
+- **Cycles per frame**: Calculated as clockSpeedHz / 60
 - **Instruction pipeline**: Single-cycle dispatch (no pipelining)
-- **Synchronizer**: Linked to system clock via `performance.now()` or SDL ticks
+- **Synchronizer**: Linked to system clock via `performance.now()`
 - **No registers**: all logic operates on RAM
 - **Subroutines**: `CALL` pushes the return address to stack; `RET` restores it
-- **System halt**: `HLT` stops execution; requires manual `reset()` to resume
+- **System halt**: `HALT` stops execution; requires manual `reset()` to resume
 - **BIOS execution**: System starts at BIOS entry point (0x0000)
 - **Memory protection**: BIOS region is write-protected
 
@@ -158,8 +139,8 @@ For detailed PPU control register documentation, see MEMORY.md.
 
 | Attribute             | Value      |
 |-----------------------|------------|
-| Clock Speed           | 2 MHz      |
-| Cycles per Frame      | 33,333     |
+| Clock Speed           | Configurable (default 3 MHz) |
+| Cycles per Frame      | clockSpeedHz / 60 |
 | Frame Rate            | 60 FPS     |
 | Instruction Latency   | 1–5 cycles |
 | Stack Access          | Safe       |
@@ -170,7 +151,7 @@ For detailed PPU control register documentation, see MEMORY.md.
 - **Tick counter**: tracks total CPU cycles
 - **PC monitor**: shows current program counter
 - **SP monitor**: shows stack pointer
-- **Flags view**: read flags from `0xFF00–0xFF03`
+- **Flags view**: read flags from `0xFF00–0xFF05`
 - **Breakpoint support** (optional, in debugger)
 - **Instruction logging** (in debug builds)
 

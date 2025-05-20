@@ -1,3 +1,17 @@
+# Author and License
+
+**Author**: Luis A. Mendoza - Creator of Lu8
+
+This documentation is part of the Lu8 Fantasy Console project. While this documentation serves as a reference for the current implementation and capabilities, please note that the project is under active and continuous development, and the documentation may change accordingly.
+
+## License and Copyright
+
+© 2024 Luis A. Mendoza. All rights reserved.
+
+This documentation and the Lu8 Fantasy Console are original works created by Luis A. Mendoza. The Lu8 system is a fictional console design and implementation that does not correspond to any existing hardware or other projects. This is a closed-source project, and all rights to the design, implementation, and documentation are reserved.
+
+---
+
 # LU8 Assembly Language Technical Documentation
 
 ## Overview
@@ -20,11 +34,9 @@ The LU8 assembly language is a custom low-level language designed for the LU8 Vi
 
 * Move data from a memory address or an immediate value into a memory address.
 * **Usage**:
-
   * `MOV [dest], [src]`
   * `MOV [dest], immediate`
 * **Example**:
-
   * `MOV [0x8000], [0x8001]`
   * `MOV [0x8000], 64`
 * **Cycles**: 5
@@ -34,16 +46,32 @@ The LU8 assembly language is a custom low-level language designed for the LU8 Vi
 #### `ADD` (0x02)
 
 * Adds the value at `[src]` to `[dest]` and stores the result in `[dest]`.
-* **Usage**: `ADD [dest], [src]`
+* **Usage**: `ADD [dest], [src]` or `ADD [dest], immediate`
 * **Example**: `ADD [0x8000], [0x8001]`
 * **Cycles**: 5
 
 #### `SUB` (0x03)
 
 * Subtracts the value at `[src]` from `[dest]` and stores the result in `[dest]`.
-* **Usage**: `SUB [dest], [src]`
+* **Usage**: `SUB [dest], [src]` or `SUB [dest], immediate`
 * **Example**: `SUB [0x8000], [0x8001]`
 * **Cycles**: 5
+
+#### `INC` (0x07)
+
+* Increments the value at `[addr]` by 1.
+* Sets ZF if result is zero.
+* **Usage**: `INC [addr]`
+* **Example**: `INC [0x8000]`
+* **Cycles**: 3
+
+#### `DEC` (0x08)
+
+* Decrements the value at `[addr]` by 1.
+* Sets ZF if result is zero.
+* **Usage**: `DEC [addr]`
+* **Example**: `DEC [0x8000]`
+* **Cycles**: 3
 
 #### `MUL` (0x0E)
 
@@ -69,7 +97,6 @@ The LU8 assembly language is a custom low-level language designed for the LU8 Vi
 * Halts execution if division by zero is attempted.
 * **Usage**: `MOD [dest], [src]` or `MOD [dest], immediate`
 * **Example**:
-
   ```asm
   MOV [0x8000], 10
   MOV [0x8001], 3
@@ -129,9 +156,69 @@ The LU8 assembly language is a custom low-level language designed for the LU8 Vi
 * **Example**: `SHR [0x8000], 1`
 * **Cycles**: 5
 
----
+### Control Flow
 
-## Stack and Subroutine Instructions
+#### `JMP` (0x04)
+
+* Jump unconditionally to an address.
+* **Usage**: `JMP label` or `JMP 0x1234`
+* **Cycles**: 3
+
+#### `CMP` (0x05)
+
+* Compare values at two memory addresses.
+* Sets ZF, GF, LF.
+* **Usage**: `CMP [addr1], [addr2]` or `CMP [addr1], immediate`
+* **Cycles**: 5
+
+#### `JNZ` (0x06)
+
+* Jump if Zero Flag is NOT set.
+* **Usage**: `JNZ label`
+* **Cycles**: 3
+
+#### `JZ` (0x09)
+
+* Jump if Zero Flag is set.
+* **Usage**: `JZ label`
+* **Cycles**: 3
+
+#### `JEQ` (0x0A)
+
+* Alias for JZ - Jump if Equal.
+* **Usage**: `JEQ label`
+* **Cycles**: 3
+
+#### `JNEQ` (0x0B)
+
+* Jump if Not Equal (Zero Flag is clear).
+* **Usage**: `JNEQ label`
+* **Cycles**: 3
+
+#### `JG` (0x0C)
+
+* Jump if Greater Flag is set.
+* **Usage**: `JG label`
+* **Cycles**: 3
+
+#### `JL` (0x0D)
+
+* Jump if Less Flag is set.
+* **Usage**: `JL label`
+* **Cycles**: 3
+
+#### `JGE` (0x20)
+
+* Jump if Greater or Equal (GF is set OR ZF is set).
+* **Usage**: `JGE label`
+* **Example**:
+  ```asm
+  CMP [0x8000], [0x8001] ; Compare values
+  JGE greater_or_equal   ; Jump if first value >= second value
+  ```
+* **Cycles**: 3
+
+### Stack and Subroutine Instructions
 
 #### `CALL` (0x16)
 
@@ -150,7 +237,7 @@ The LU8 assembly language is a custom low-level language designed for the LU8 Vi
 #### `PUSH` (0x18)
 
 * Pushes the value at the specified address (or immediate) to the stack.
-* **Usage**: `PUSH [addr]` or `PUSH 64`
+* **Usage**: `PUSH [addr]` or `PUSH immediate`
 * **Cycles**: 3
 
 #### `POP` (0x19)
@@ -159,6 +246,8 @@ The LU8 assembly language is a custom low-level language designed for the LU8 Vi
 * **Usage**: `POP [addr]`
 * **Cycles**: 3
 
+### Memory Operations
+
 #### `MEMCPY` (0x1F)
 
 * Copies a block of memory from `[src]` to `[dest]`, for `len` bytes.
@@ -166,17 +255,16 @@ The LU8 assembly language is a custom low-level language designed for the LU8 Vi
 * **Usage**: `MEMCPY [dest], [src], len`
 * **Cycles**: 10 + N
 
-#### `HLT` (0xFF)
+#### `MEMSET` (0x22)
 
-* Halts CPU execution permanently.
-* **Usage**: `HLT`
-* **Cycles**: 1
-
----
+* Sets a block of memory to a specific value.
+* **Usage**: `MEMSET [dest], value, len`
+* **Example**: `MEMSET [0x8000], 0, 16` ; Clear 16 bytes
+* **Cycles**: 5 + N
 
 ### System Operations
 
-#### `RND` (0x1B)
+#### `RND` (0x21)
 
 * Writes a random number between 0 and 255 to `[dest]`.
 * Sets ZF if result is zero.
@@ -194,42 +282,6 @@ The LU8 assembly language is a custom low-level language designed for the LU8 Vi
 * Logs the value at a memory address for debugging.
 * **Usage**: `LOG [addr]`
 * **Cycles**: 3
-
----
-
-### Control Flow
-
-#### `JMP` (0x04)
-
-* Jump unconditionally to an address.
-* **Usage**: `JMP label` or `JMP 0x1234`
-* **Cycles**: 3
-
-#### `CMP` (0x05)
-
-* Compare values at two memory addresses.
-* Sets ZF, GF, LF.
-* **Usage**: `CMP [addr1], [addr2]`
-* **Cycles**: 5
-
-#### `JNZ` (0x06)
-
-* Jump if Zero Flag is NOT set.
-* **Usage**: `JNZ label`
-* **Cycles**: 3
-
-#### `JGE` (0x20)
-
-* Jump if Greater or Equal (GF is set OR ZF is set).
-* **Usage**: `JGE label`
-* **Example**:
-  ```asm
-  CMP [0x8000], [0x8001] ; Compare values
-  JGE greater_or_equal   ; Jump if first value >= second value
-  ```
-* **Cycles**: 3
-
----
 
 ### Graphics Operations
 
@@ -253,11 +305,14 @@ The LU8 assembly language is a custom low-level language designed for the LU8 Vi
 
 #### `SETCOLOR` (0x82)
 
-* Set current drawing color from PPU_COLOR
-* **Usage**: `SETCOLOR`
-* **Registers**:
-  * `0xD800` (PPU_COLOR): Color to set
-* **Cycles**: 1
+* Sets the current drawing color by writing to `PPU_COLOR`.
+* Accepts either an immediate value (`0–15`) or a memory address containing the color.
+* **Usage**:
+  * `SETCOLOR 6` → sets color 6
+  * `SETCOLOR [0x8000]` → sets color from memory at 0x8000
+* **Writes to**:
+  * `0xD800` (PPU_COLOR)
+* **Cycles**: 2
 
 #### `LINE` (0x83)
 
@@ -422,7 +477,7 @@ CLS
 ## Example
 
 ```asm
-; Bouncing Ball Program
+; Draw a red pixel
 ; Data Section:
 ; 0x8000: ball_x (logic position)
 ; 0x8001: ball_dx (direction)
@@ -436,13 +491,12 @@ start:
     MOV [0x8000], 64     ; logic_x = 64
     MOV [0xD806], 64     ; RECT_X = 64
     MOV [0xD807], 64     ; RECT_Y = 64
-    MOV [0xD800], 8      ; PPU_COLOR = red
     MOV [0x8001], 1      ; dx = 1
 
 main_loop:
     CLS
-    SETCOLOR
+    SETCOLOR 8 ; color red, same as:  MOV [0xD800], 8
     PSET
     VSYNC
-    JMP main_loop
+    HALT
 ```

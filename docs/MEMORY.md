@@ -1,3 +1,17 @@
+# Author and License
+
+**Author**: Luis A. Mendoza - Creator of Lu8
+
+This documentation is part of the Lu8 Fantasy Console project. While this documentation serves as a reference for the current implementation and capabilities, please note that the project is under active and continuous development, and the documentation may change accordingly.
+
+## License and Copyright
+
+© 2024 Luis A. Mendoza. All rights reserved.
+
+This documentation and the Lu8 Fantasy Console are original works created by Luis A. Mendoza. The Lu8 system is a fictional console design and implementation that does not correspond to any existing hardware or other projects. This is a closed-source project, and all rights to the design, implementation, and documentation are reserved.
+
+---
+
 # LU8 Memory Map Technical Documentation
 
 ## Overview
@@ -11,7 +25,7 @@ The LU8 memory system is organized into distinct sections, providing a structure
 ### Total Memory Space
 
 * **Size**: 64KB (`0x0000 - 0xFFFF`)
-* **Divided into**: 4 primary sections
+* **Divided into**: 6 primary sections
 
 ### Memory Sections
 
@@ -24,6 +38,7 @@ The LU8 memory system is organized into distinct sections, providing a structure
   - Loaded automatically on system reset
   - Cannot be overwritten by programs
   - Contains essential system routines
+  - Protected by memory protection system
 
 #### 2. Code Section (28KB)
 
@@ -33,43 +48,61 @@ The LU8 memory system is organized into distinct sections, providing a structure
 * **Notes**:
   - Programs are loaded starting at `0x1000`
   - Space after BIOS for user programs
+  - Maximum program size is 28KB
 
 #### 3. Data Section (16KB)
 
 * **Range**: `0x8000 - 0xBFFF`
 * **Purpose**: General-purpose variable and data storage
 * **Access**: Read / Write
+* **Notes**:
+  - Used for program variables and game state
+  - Fully accessible for read/write operations
 
 #### 4. Graphics & Audio Section (8KB)
 
 * **Range**: `0xC000 - 0xDFFF`
 * **Purpose**: Graphics memory (sprites, tiles, framebuffer), drawing registers, and APU audio channels
 * **Access**: Read / Write
+* **Notes**:
+  - Memory-mapped I/O for PPU and APU
+  - Direct access to framebuffer and control registers
 
-#### 5. Stack Section (~7.75KB)
+#### 5. Stack Section (8KB)
 
-* **Range**: `0xE000 - 0xFEFF`
+* **Range**: `0xE000 - 0xFFFF`
 * **Purpose**: Function call stack, local variables, return addresses
 * **Access**: Read / Write (Stack grows downward)
+* **Notes**:
+  - Initialized at top (`0xFFFF`)
+  - Stack overflow and underflow are detected
+  - Used for subroutine calls and local variables
 
 #### 6. I/O Registers (256B)
 
 * **Range**: `0xFF00 - 0xFFFF`
 * **Purpose**: CPU status flags, input register, indirect VRAM access
 * **Access**: Memory-mapped I/O (Read / Write or Read-only)
+* **Notes**:
+  - Includes system flags and input registers
+  - Some registers are read-only (e.g., input)
+  - Used for system control and status
 
 ---
 
-## Graphics & Audio Memory Layout (within 0xC000 - 0xDFFF)
+## Graphics & Audio Memory Layout (within `0xC000` – `0xDFFF`)
 
-| Subsection                | Range             | Size    | Purpose                       |
-| ------------------------- | ----------------- | ------- | ----------------------------- |
-| Sprite Data               | `0xC000`-`0xC7FF` | 2KB     | Sprite definitions            |
-| Tile Data                 | `0xC800`-`0xCFFF` | 2KB     | Tile definitions              |
-| Screen Buffer             | `0xD000`-`0xD7FF` | 2KB     | Framebuffer output            |
-| Drawing Control Registers | `0xD800`-`0xD81F` | 32B     | PPU drawing command registers |
-| APU Channel Registers     | `0xD820`-`0xD84F` | 48B     | Audio channel configuration   |
-| Reserved Graphics Memory  | `0xD850`-`0xDFFF` | 1968B   | Color Palette (48B) + Reserved for future use |
+| Subsection                | Range             | Size  | Purpose                                               |
+|---------------------------|-------------------|-------|-------------------------------------------------------|
+| Sprite Data               | `0xC000`–`0xC7FF` | 2KB   | Sprite definitions                                    |
+| Tile Data                 | `0xC800`–`0xCFFF` | 2KB   | Tile definitions                                      |
+| Screen Buffer             | `0xD000`–`0xD7FF` | 2KB   | Framebuffer output                                    |
+| Drawing Control Registers | `0xD800`–`0xD81F` | 32B   | PPU drawing command registers                         |
+| APU Channel Registers     | `0xD820`–`0xD84F` | 48B   | Audio channel configuration                           |
+| Color Palette             | `0xD850`–`0xD88F` | 64B   | 16-color palette (48B used, 16B padding)              |
+| Font Memory               | `0xD890`–`0xDCFF` | 1136B | System font (896B used for 112 glyphs × 8 bytes)      |
+| Reserved Tables Area      | `0xDD00`–`0xDDFF` | 256B  | Scroll buffers, blending tables, or LUTs              |
+| Extended Reserved         | `0xDE00`–`0xDFFF` | 512B  | Reserved for future extensions or BIOS scratch space  |
 
 ---
 
@@ -80,24 +113,28 @@ The LU8 memory system is organized into distinct sections, providing a structure
 * Used by the CPU for instruction fetching
 * Read/Execute only
 * Write operations are discouraged and may be ignored or cause errors
+* Protected by memory protection system
 
 ### Data Section
 
 * Used by programs for dynamic memory and variables
 * Fully readable and writable
+* No special protection or restrictions
 
 ### Graphics & Audio Section
 
 * Accessible by CPU, PPU, and APU
 * Includes video RAM, tile/sprite memory, drawing registers, and APU channel configuration
 * Fully readable and writable
+* Memory-mapped I/O for hardware access
 
 ### Stack Section
 
 * Managed by CPU stack operations (e.g., `PUSH`, `POP`)
-* Located in `0xE000` - `0xFEFF`
-* Initialized at top (`0xFEFF`), grows downward
+* Located in `0xE000` - `0xFFFF`
+* Initialized at top (`0xFFFF`), grows downward
 * Stack overflow and underflow are detected
+* Used for subroutine calls and local variables
 
 ### I/O Register Section
 
@@ -105,6 +142,7 @@ The LU8 memory system is organized into distinct sections, providing a structure
 * Memory-mapped system registers (e.g., CPU flags, input, indirect VRAM access)
 * Access may be read-only, write-only, or read/write depending on the register
 * Should not be used for general-purpose data or stack
+* Includes system flags and input registers
 
 ---
 
@@ -128,11 +166,12 @@ The LU8 memory system is organized into distinct sections, providing a structure
 | `0xFF06` | PPUADDR (VRAM addr latch) |
 | `0xFF07` | PPUDATA (write to VRAM)   |
 
-### Input Register
+### Input Registers
 
 | Address  | Description                                                     |
 | -------- | --------------------------------------------------------------- |
-| `0xFF10` | INPUT - 8-bit input register (buttons A/B/Select/Start + D-pad) |
+| `0xFF10` | Player 1 Input - 8-bit input register (buttons A/B/Select/Start + D-pad) |
+| `0xFF11` | Player 2 Input - 8-bit input register (buttons A/B/Select/Start + D-pad) |
 
 ---
 
@@ -163,7 +202,7 @@ The LU8 memory system is organized into distinct sections, providing a structure
 | `0xD814–0xD81F` | —           | Reserved for future extensions    |
 
 
-## 🎨 Color Palette Memory (0xD850–0xD87F)
+## 🎨 Color Palette Memory (0xD850–0xD88F)
 
 The LU8 system uses a 16-color fixed index palette (`0–15`). Each index can be dynamically modified at runtime via memory-mapped writes to this region.
 
@@ -228,20 +267,15 @@ Use helper functions in `APUMemory` namespace to get addresses per channel.
 
 ## Notes
 
-* All memory addresses are 16-bit.
-* Memory-mapped I/O follows a predictable pattern to simplify emulator and hardware logic.
-* Some addresses may be reserved for future extensions of the LU8 system.
-
-```asm
-; Example: Write to VRAM using indirect addressing
-MOV [0xFF06], 0x20     ; Set high byte of VRAM address
-MOV [0xFF06], 0x00     ; Set low byte of VRAM address
-MOV [0xFF07], 42       ; Write value 42 to VRAM
-```
-
----
-
-This memory model ensures that code, graphics, data, and audio are clearly separated, simplifying debugging and performance tuning.
+* All memory addresses are 16-bit
+* Memory-mapped I/O follows a predictable pattern to simplify emulator and hardware logic
+* Some addresses may be reserved for future extensions of the LU8 system
+* Memory operations are monitored when RAM monitoring is enabled
+* Memory sections can be filtered and monitored in real-time
+* Stack operations are automatically managed by the CPU
+* Input registers are read-only and updated every frame
+* APU registers are write-only and control audio channels
+* PPU registers control graphics operations and framebuffer access
 
 ## Memory Protection
 
@@ -249,6 +283,7 @@ This memory model ensures that code, graphics, data, and audio are clearly separ
 * Attempts to write to BIOS memory will trigger a runtime error
 * BIOS verification is performed on load
 * Programs cannot be loaded into BIOS space
+* Memory protection is enforced during execution
 
 ## Loading Order
 
