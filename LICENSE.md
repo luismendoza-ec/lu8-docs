@@ -17,6 +17,7 @@ Lu8 makes use of the following open source components, licensed under their resp
 * **Monaco Editor** – [MIT License](https://github.com/microsoft/monaco-editor)
 * **hexy.js** – [MIT License](https://github.com/a2800276/hexy.js)
 * **xterm.js** – [MIT License](https://github.com/xtermjs/xterm.js)
+* **luaparse** – [MIT License](https://github.com/fstirlitz/luaparse)
 
 These libraries are used to support the web-based development experience, but do not affect the core architecture or licensing of Lu8.
 
