@@ -22,7 +22,7 @@ The Lu8 Code Editor is a specialized web-based editor designed specifically for 
 The editor provides comprehensive syntax highlighting for Lu8 assembly code:
 
 - **Control Flow Instructions** (Blue)
-  - NOP, JMP, JNZ, JZ, JEQ, JNEQ, JG, JL, JGE, CALL, RET
+  - NOP, JMP, JNZ, JZ, JEQ, JNEQ, JG, JL, JGE, JLE, CALL, RET
   - HALT instruction (special red highlighting)
 
 - **Data Movement Instructions** (Teal)
