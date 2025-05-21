@@ -165,3 +165,37 @@ SCREEN_HEIGHT EQU 128
 - Supports modern browser features
 - Automatic saving and recovery
 - Real-time error checking 
+
+## Experimental Features
+
+### Lua Support
+The editor includes experimental support for Lua programming language. This feature is currently in development and allows writing code in a simplified version of Lua that gets transpiled to Lu8 assembly code.
+
+#### Current Status
+- Basic Lua syntax support
+- Automatic transpilation to ASM
+- Syntax highlighting for Lua code
+- Limited subset of Lua features
+
+#### Usage
+To use Lua mode:
+1. Use the `set-lang lua` command in the terminal
+2. Write your code in Lua syntax
+3. The code will be automatically transpiled to ASM when compiled
+
+#### Limitations
+- Only basic Lua features are supported
+- No standard Lua libraries
+- Limited error reporting
+- Some Lua constructs may not be available
+
+#### Example
+```lua
+-- Simple Lua example
+local x = 0
+while x < 10 do
+    x = x + 1
+end
+```
+
+This feature is under active development and may change significantly in future versions. 

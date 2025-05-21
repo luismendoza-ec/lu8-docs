@@ -84,6 +84,21 @@ Compiles the current code and saves it as a binary file.
 - Includes proper headers
 - Ready for direct execution
 
+### Editor Commands
+
+#### `set-lang`
+Changes the editor's programming language mode.
+- Supports 'asm' and 'lua' modes
+- Updates syntax highlighting
+- Affects code compilation
+- Default mode is 'asm'
+
+#### `get-lang`
+Shows the current editor language mode.
+- Displays current language setting
+- Useful for checking active mode
+- Shows 'asm' or 'lua'
+
 ### Monitoring Commands
 
 #### `monitor`
@@ -182,6 +197,18 @@ $ compile
 [INFO] Compiling to binary...
 $ rom
 [INFO] Loading ROM file...
+```
+
+### Language Mode
+```bash
+$ get-lang
+Current language: asm
+$ set-lang lua
+[INFO] Language set to lua
+$ get-lang
+Current language: lua
+$ set-lang asm
+[INFO] Language set to asm
 ```
 
 ### Monitoring
