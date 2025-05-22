@@ -176,6 +176,47 @@ The Lu8 Mini Console provides several graphics functions for creating visual out
   print(42)  -- Output: 42
   ```
 
+## Input Functions
+
+Lu8 provides an easy-to-use function to check button states:
+
+### `btn(mask [, player])`
+
+Returns `true` if the specified button (or combination) is currently pressed.
+If the `player` is not provided, it defaults to Player 1.
+
+```lua
+if btn(BUTTON_RIGHT) then
+  print("Player 1 is moving right!")
+end
+
+if btn(BUTTON_A, PLAYER_2) then
+  print("Player 2 pressed A")
+end
+```
+
+## Input Constants
+
+### Button Masks
+
+```lua
+BUTTON_A      = 0x01  -- Bit 0
+BUTTON_B      = 0x02  -- Bit 1
+BUTTON_SELECT = 0x04  -- Bit 2
+BUTTON_START  = 0x08  -- Bit 3
+BUTTON_UP     = 0x10  -- Bit 4
+BUTTON_DOWN   = 0x20  -- Bit 5
+BUTTON_LEFT   = 0x40  -- Bit 6
+BUTTON_RIGHT  = 0x80  -- Bit 7
+```
+
+### Player Constants
+
+```lua
+PLAYER_1 = 0
+PLAYER_2 = 1
+```
+
 ## Example Programs
 
 ### Simple Animation

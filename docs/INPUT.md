@@ -182,6 +182,29 @@ Player 1 Controls:                    Player 2 Controls:
     JMP .game_loop
 ```
 
+## Lua Scripting – Button Input with `btn()`
+
+Lu8 also supports input checking directly from Lua scripts using the `btn()` function. This is the high-level equivalent of reading the input registers manually in Assembly.
+
+```lua
+-- Check if the RIGHT button is held by Player 1
+if btn(BUTTON_RIGHT) then
+  print("Player 1 is moving right!")
+end
+
+-- Check if the A button is held by Player 2
+if btn(BUTTON_A, PLAYER_2) then
+  print("Player 2 pressed A")
+end
+```
+
+* `btn(mask, player?) → boolean`
+* Defaults to Player 1 if `player` is not provided.
+* Returns `true` if the specified button is currently held.
+
+This function abstracts the bitmask logic and register reading behind a simple, readable syntax ideal for game logic in Lua.
+
+
 ## Best Practices
 
 1. **Input Reading**: Always read both player inputs at the start of your game loop:
