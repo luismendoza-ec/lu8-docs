@@ -109,14 +109,16 @@ The project is still under heavy development, but its foundation is solid and ex
 * Input system and key mapping
 * BIOS and `.lu8` ROM boot
 * All-in-One Environment (editor, shell, monitoring)
+* View generated binary hex output
 * Basic Lua support with graphics functions
+
 
 ### 🔧 In Progress / Planned
 
+* Improve Lua experimental implementation
 * Improve BIOS behavior and boot sequence
 * Font rendering and character support
 * APU improvements (envelopes, better channel control)
-* View generated binary hex output
 * Better fullscreen mode for Lu8 VM
 * Enhanced CPU % usage calculation
 * More .ASM and Lua examples and demos

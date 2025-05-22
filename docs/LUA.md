@@ -157,10 +157,29 @@ The Lu8 Mini Console provides several graphics functions for creating visual out
   setcolor(2)  -- Set color to 2
   ```
 
-- `resetpalette()`: Reset the color palette to default values
+- `resetpal()`: Reset the color palette to default values
   ```lua
-  resetpalette()  -- Reset colors
+  resetpal()  -- Reset colors
   ```
+
+### `setpal(index, r, g, b)`
+
+Changes the color at the specified palette index to a new RGB value.
+Each component (`r`, `g`, `b`) must be an integer between `0` and `255`.
+
+* **index**: Palette index (0–15)
+* **r**: Red component (0–255)
+* **g**: Green component (0–255)
+* **b**: Blue component (0–255)
+
+```lua
+-- Set palette index 3 to lime green
+setpal(3, 0, 255, 0)
+```
+
+> ⚠️ The index must be a constant value between 0 and 15. Dynamic expressions or variables are not supported.
+
+> This affects all future drawings using this color index, until `resetpal()` is called.
 
 ### Text
 - `drawchar(charIndex)`: Draw a character from the font set
