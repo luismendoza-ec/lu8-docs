@@ -285,7 +285,7 @@ end
 
 1. Only numeric values are supported
 2. No string support
-3. No local variables (all variables are global)
+3. Local variables are supported now but this implementation has not been fully tested
 4. No support for tables or complex data structures
 5. Limited memory management
 6. No support for coroutines or metatables
