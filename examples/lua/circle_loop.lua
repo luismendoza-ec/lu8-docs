@@ -3,25 +3,29 @@
 -- Luis Mendoza
 
 -- Circle loop example
+function move_circle(x, y)
+    cls()
+    circle(x, y, 5)
+    vsync() -- Wait for the next frame
+end
 
 function update()
+    local pos = 0
+    
     -- Move the circle from left to right
-    for i = 1, 128 do
-        cls()
-        circle(i, 50, 5)
-        vsync() -- Wait for the next frame
+    while pos < 128 do
+        pos = pos + 1
+        move_circle(pos, 50)
     end
 
     -- Move the circle from right to left
-    for i = 1, 128 do
-        cls()
-        circle(128 - i, 50, 5)
-        vsync() -- Wait for the next frame
+    while pos > 0 do
+        pos = pos - 1
+        move_circle(pos, 50)
     end
 end
 
 -- Main loop
 while true do
-    -- Update the circle position
     update()
 end
