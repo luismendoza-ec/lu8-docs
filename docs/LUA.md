@@ -195,6 +195,16 @@ setpal(3, 0, 255, 0)
   print(42)  -- Output: 42
   ```
 
+### Random
+- `rnd()`: Generates a random number between 0 and 255
+  ```lua
+  x = rnd()           -- Store random number in x
+  if rnd() == 2 then  -- Use in condition
+      -- do something
+  end
+  y = rnd() + 1      -- Use in expression
+  ```
+
 ## Input Functions
 
 Lu8 provides an easy-to-use function to check button states:
