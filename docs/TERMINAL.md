@@ -63,6 +63,7 @@ Shuts down the Lu8 VM.
 #### `load`
 Opens a file dialog to load an ASM file.
 - Supports .asm files
+- Supports .lua files
 - Loads code into the editor
 - Preserves current VM state
 

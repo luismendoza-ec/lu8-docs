@@ -81,7 +81,7 @@ The editor supports the standard Lu8 program structure:
 ### Integration Features
 
 #### File Operations
-- Load ASM files (.asm)
+- Load source code files (.asm or .lua)
 - Save ASM files
 - Compile to binary (.lu8)
 - Load binary files directly

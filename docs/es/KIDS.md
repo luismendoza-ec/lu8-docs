@@ -16,7 +16,7 @@ Usamos un lenguaje llamado **ensamblador** (assembly), pero no te asustes: lo va
 
 * Una computadora con el programa de Lu8 instalado
 * Un editor de texto (como VSCode o Notepad++)
-* Un archivo `.asm` donde escribirás tu código
+* Un archivo `.asm` or `.lua` donde escribirás tu código
 * ¡Ganas de crear!
 
 ---
