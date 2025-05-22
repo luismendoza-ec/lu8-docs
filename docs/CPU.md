@@ -67,7 +67,7 @@ For example:
 ### System Operations
 - `RND [dest]` (0x21): Write random number (0-255)
 - `TICK [dest]` (0x1C): Write system tick count
-- `LOG [addr]` (0x1E): Log value for debugging
+- `LOG [addr|value]` (0x1E): Log memory value or immediate for debugging
 
 ### Graphics (Using PPU Control Registers 0xD800-0xD81F)
 - `PSET` (0x80): Draw pixel using RECT_X (0xD806), RECT_Y (0xD807)

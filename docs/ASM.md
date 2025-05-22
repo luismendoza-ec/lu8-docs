@@ -290,9 +290,15 @@ The LU8 assembly language is a custom low-level language designed for the LU8 Vi
 
 #### `LOG` (0x1E)
 
-* Logs the value at a memory address for debugging.
-* **Usage**: `LOG [addr]`
+* Logs a value to the host console for debugging.
+* Accepts either a memory address or an immediate value.
+* 
+* **Usage**:  
+  - `LOG [addr]` → logs the value stored at memory address  
+  - `LOG 42` → logs the immediate value `42`
+
 * **Cycles**: 3
+
 
 ### Graphics Operations
 
