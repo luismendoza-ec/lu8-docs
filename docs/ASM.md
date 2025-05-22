@@ -73,6 +73,25 @@ The LU8 assembly language is a custom low-level language designed for the LU8 Vi
 * **Example**: `DEC [0x8000]`
 * **Cycles**: 3
 
+#### `NEG` (0x1A)
+
+* Negates the value at `[addr]` using **two's complement** (`-x & 0xFF`).
+* Stores the result back in `[addr]`.
+* Sets:
+
+  * `ZF` (Zero Flag) if result is `0`
+  * `NF` (Negative Flag) if result has the high bit set (bit 7)
+* **Usage**: `NEG [addr]`
+* **Example**:
+
+  ```asm
+  MOV [0x8000], 5
+  NEG [0x8000] ; becomes 251 (0xFB)
+  LOG [0x8000] ; logs 251
+  ```
+* **Cycles**: 3
+* **Note**: All values in LU8 are treated as **unsigned 8-bit**, but `NEG` performs two's complement math to support arithmetic logic (e.g., for `SUB`).
+
 #### `MUL` (0x0E)
 
 * Multiplies the value at `[dest]` by `[src]` and stores the result in `[dest]`.

@@ -46,6 +46,7 @@ For example:
 - `CMP a, b` (0x05): Compare two values, sets flags (ZF, GF, LF)
 - `INC [addr]` (0x07): Increment value at address
 - `DEC [addr]` (0x08): Decrement value at address
+- `NEG [addr]` (0x1A): Negate value using two's complement
 - `MUL [dest], src` (0x0E): Multiply destination by source
 - `DIV [dest], src` (0x0F): Divide destination by source
 - `MOD [dest], src` (0x1D): Modulo of destination by source
