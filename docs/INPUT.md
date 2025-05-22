@@ -38,6 +38,8 @@ Bit Layout (0xFF11 Register - Player 2):
 The input states are mapped to memory addresses:
 - Player 1: `0xFF10` (Read-only)
 - Player 2: `0xFF11` (Read-only)
+- Player 1 btnp: `0xFF12` (Read-only)
+- Player 2 btnp: `0xFF13` (Read-only)
 
 ## Button Constants
 The following button masks are defined for easy access:
@@ -182,10 +184,11 @@ Player 1 Controls:                    Player 2 Controls:
     JMP .game_loop
 ```
 
-## Lua Scripting – Button Input with `btn()`
+## Lua Scripting – Button Input with `btn()` and `btnp()`
 
-Lu8 also supports input checking directly from Lua scripts using the `btn()` function. This is the high-level equivalent of reading the input registers manually in Assembly.
+Lu8 supports two input checking functions from Lua scripts:
 
+### `btn()`
 ```lua
 -- Check if the RIGHT button is held by Player 1
 if btn(BUTTON_RIGHT) then
@@ -202,8 +205,28 @@ end
 * Defaults to Player 1 if `player` is not provided.
 * Returns `true` if the specified button is currently held.
 
-This function abstracts the bitmask logic and register reading behind a simple, readable syntax ideal for game logic in Lua.
+### `btnp()`
+```lua
+-- Check if the A button was just pressed by Player 1
+if btnp(BUTTON_A) then
+  print("Player 1 just pressed A!")
+end
 
+-- Check if the B button was just pressed by Player 2
+if btnp(BUTTON_B, PLAYER_2) then
+  print("Player 2 just pressed B")
+end
+```
+
+* `btnp(mask, player?) → boolean`
+* Defaults to Player 1 if `player` is not provided.
+* Returns `true` if the specified button was just pressed or held long enough to trigger a repeat.
+* Emulates PICO-8's btnp() behavior with:
+  - Initial delay of 15 frames before repeating
+  - Repeat interval of 4 frames after initial delay
+  - Detects both initial press and repeat events
+
+These functions abstract the bitmask logic and register reading behind a simple, readable syntax ideal for game logic in Lua.
 
 ## Best Practices
 
@@ -235,6 +258,8 @@ This function abstracts the bitmask logic and register reading behind a simple, 
 - Button states are automatically cleared on system reset
 - Input handling is synchronized with the frame rate (60 FPS)
 - Input events are captured only when the canvas has focus
+- The btnp() functionality uses two additional read-only registers (0xFF12, 0xFF13)
+- Button press detection includes both initial press and repeat events
 
 ## Limitations
 

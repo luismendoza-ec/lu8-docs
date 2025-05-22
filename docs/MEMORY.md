@@ -172,6 +172,8 @@ The LU8 memory system is organized into distinct sections, providing a structure
 | -------- | --------------------------------------------------------------- |
 | `0xFF10` | Player 1 Input - 8-bit input register (buttons A/B/Select/Start + D-pad) |
 | `0xFF11` | Player 2 Input - 8-bit input register (buttons A/B/Select/Start + D-pad) |
+| `0xFF12` | Player 1 btnp - 8-bit register for button press detection (emulates PICO-8's btnp) |
+| `0xFF13` | Player 2 btnp - 8-bit register for button press detection (emulates PICO-8's btnp) |
 
 ---
 
@@ -234,60 +236,3 @@ MOV [0xD859], 255 ; Red
 MOV [0xD85A], 255 ; Green
 MOV [0xD85B], 0   ; Blue
 ```
-
-The rest of the region from `0xD890–0xDFFF` (1920 bytes) remains reserved for future use, such as:
-
-- Additional palettes
-- Tilemap control
-- Scroll buffers
-- User-defined LUTs
-
----
-
-## 🎵 APU Channel Registers (0xD820–0xD84F)
-
-Each channel occupies 16 bytes (5 channels = 80 bytes total). Channels: Pulse1, Pulse2, Triangle, Noise, DMC.
-
-| Offset | Name         | Description                  |
-| ------ | ------------ | ---------------------------- |
-| +0     | `CTRL`       | Enable, loop                 |
-| +1     | `VOL`        | Volume (0-15)                |
-| +2     | `SWEEP`      | Sweep (pulse only)           |
-| +3     | `FREQ_L`     | Frequency low byte           |
-| +4     | `FREQ_H`     | Frequency high byte          |
-| +5     | `DUTY`       | Duty cycle (pulse only)      |
-| +6     | `LENGTH`     | Duration in samples          |
-| +7     | `PHASE`      | Initial phase                |
-| +8     | `DMC_SAMPLE` | Sample data write (DMC only) |
-| +9–15  | —            | Reserved / Future use        |
-
-Use helper functions in `APUMemory` namespace to get addresses per channel.
-
----
-
-## Notes
-
-* All memory addresses are 16-bit
-* Memory-mapped I/O follows a predictable pattern to simplify emulator and hardware logic
-* Some addresses may be reserved for future extensions of the LU8 system
-* Memory operations are monitored when RAM monitoring is enabled
-* Memory sections can be filtered and monitored in real-time
-* Stack operations are automatically managed by the CPU
-* Input registers are read-only and updated every frame
-* APU registers are write-only and control audio channels
-* PPU registers control graphics operations and framebuffer access
-
-## Memory Protection
-
-* BIOS region (`0x0000 - 0x0FFF`) is write-protected
-* Attempts to write to BIOS memory will trigger a runtime error
-* BIOS verification is performed on load
-* Programs cannot be loaded into BIOS space
-* Memory protection is enforced during execution
-
-## Loading Order
-
-1. BIOS is loaded first at `0x0000` during system reset
-2. BIOS is verified for integrity
-3. Programs are loaded at `0x1000` after BIOS
-4. Memory protection is enforced during execution
