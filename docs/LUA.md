@@ -243,6 +243,34 @@ if btnp(BUTTON_B, PLAYER_2) then
 end
 ```
 
+## Memory Functions
+
+Lu8 provides direct memory access functions for advanced usage:
+
+### `peek(address)`
+
+Reads a byte value from the specified memory address.
+
+* **address**: Memory address to read from (0x0000 to 0xFFFF)
+* **Returns**: The byte value at the specified address
+
+```lua
+value = peek(0x8000)  -- Read value from address 0x8000
+```
+
+### `poke(address, value)`
+
+Writes a byte value to the specified memory address.
+
+* **address**: Memory address to write to (0x0000 to 0xFFFF)
+* **value**: Byte value to write (0 to 255)
+
+```lua
+poke(0x8000, 42)  -- Write value 42 to address 0x8000
+```
+
+> ⚠️ Use these functions with caution as they provide direct memory access. Writing to incorrect addresses may cause unexpected behavior or system instability.
+
 ## Input Constants
 
 ### Button Masks
