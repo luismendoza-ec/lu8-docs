@@ -59,6 +59,12 @@ The editor provides comprehensive syntax highlighting for Lu8 assembly code:
 - Hover over any instruction to see detailed documentation
 - Shows instruction description, syntax, and examples
 - Provides immediate feedback on instruction usage
+- Hover over memory addresses to see memory section information:
+  - Shows the memory section (CODE, DATA, GFX, STACK, etc.)
+  - Displays detailed description of the section
+  - Works with both direct addresses (0x8000) and bracketed addresses ([0x8000])
+  - Supports all memory-mapped registers (PPU, APU, Palette, etc.)
+  - Only shows for valid 4-digit hexadecimal addresses (0x0000-0xFFFF)
 
 #### Auto-completion
 - Suggests available instructions as you type
