@@ -3,6 +3,7 @@
 -- Luis Mendoza
 
 -- Input handling example
+-- Move the circle with the arrow keys
 
 -- Button constants
 BUTTON_A      = 0x01
@@ -15,6 +16,7 @@ BUTTON_LEFT   = 0x40
 BUTTON_RIGHT  = 0x80
 
 function draw_player(x, y)
+    setcolor(10) -- Set the color to yellow
     circle(x, y, 5)
 end
 
