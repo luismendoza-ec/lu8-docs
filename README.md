@@ -80,6 +80,9 @@ To help you get started with Lu8, here's a structured guide to our documentation
 * [APU](docs/APU.md) - Audio processing and sound generation
 * [Input](docs/INPUT.md) - Controller input and key mapping
 
+### Graphics Output
+* [Canvas](docs/CANVAS.md) - Rendering system, screen resolution, scaling, screenshot and video capture
+
 ### Development Tools
 * [Code Editor](docs/CODE-EDITOR.md) - Using the integrated development environment
 * [Terminal](docs/TERMINAL.md) - Working with the virtual console shell

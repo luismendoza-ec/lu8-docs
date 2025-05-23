@@ -18,6 +18,7 @@ Lu8 makes use of the following open source components, licensed under their resp
 * **hexy.js** – [MIT License](https://github.com/a2800276/hexy.js)
 * **xterm.js** – [MIT License](https://github.com/xtermjs/xterm.js)
 * **luaparse** – [MIT License](https://github.com/fstirlitz/luaparse)
+* **CCapture.js** – [MIT License](https://github.com/spite/ccapture.js)
 
 These libraries are used to support the web-based development experience, but do not affect the core architecture or licensing of Lu8.
 
