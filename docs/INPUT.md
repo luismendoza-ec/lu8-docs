@@ -40,6 +40,8 @@ The input states are mapped to memory addresses:
 - Player 2: `0xFF11` (Read-only)
 - Player 1 btnp: `0xFF12` (Read-only)
 - Player 2 btnp: `0xFF13` (Read-only)
+- Input Initial Delay: `0xFF14` (Read/Write) - Configures initial delay before repeating (in frames)
+- Input Repeat Interval: `0xFF15` (Read/Write) - Configures repeat interval after initial delay (in frames)
 
 ## Button Constants
 The following button masks are defined for easy access:
@@ -260,6 +262,11 @@ These functions abstract the bitmask logic and register reading behind a simple,
 - Input events are captured only when the canvas has focus
 - The btnp() functionality uses two additional read-only registers (0xFF12, 0xFF13)
 - Button press detection includes both initial press and repeat events
+- Input timing configuration can be modified through memory-mapped registers:
+  - `0xFF14`: Initial delay before repeating (default: 15 frames, set by BIOS)
+  - `0xFF15`: Repeat interval after initial delay (default: 4 frames, set by BIOS)
+  - Both values must be at least 1 frame
+  - Values are reset to BIOS defaults on system reset
 
 ## Limitations
 
@@ -269,4 +276,5 @@ These functions abstract the bitmask logic and register reading behind a simple,
 - 8 buttons per player maximum due to 8-bit register limitation
 - No support for additional controller types
 - Input is only captured when the canvas has focus
-- No support for gamepad/controller input 
+- No support for gamepad/controller input
+- Input timing configuration values must be at least 1 frame 

@@ -174,6 +174,8 @@ The LU8 memory system is organized into distinct sections, providing a structure
 | `0xFF11` | Player 2 Input - 8-bit input register (buttons A/B/Select/Start + D-pad) |
 | `0xFF12` | Player 1 btnp - 8-bit register for button press detection (emulates PICO-8's btnp) |
 | `0xFF13` | Player 2 btnp - 8-bit register for button press detection (emulates PICO-8's btnp) |
+| `0xFF14` | Input Initial Delay - Configures initial delay before repeating (in frames, initialized to 15 by BIOS) |
+| `0xFF15` | Input Repeat Interval - Configures repeat interval after initial delay (in frames, initialized to 4 by BIOS) |
 
 ---
 

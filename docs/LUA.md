@@ -207,7 +207,7 @@ setpal(3, 0, 255, 0)
 
 ## Input Functions
 
-Lu8 provides an easy-to-use function to check button states:
+Lu8 provides easy-to-use functions to check button states:
 
 ### `btn(mask [, player])`
 
@@ -221,6 +221,25 @@ end
 
 if btn(BUTTON_A, PLAYER_2) then
   print("Player 2 pressed A")
+end
+```
+
+### `btnp(mask [, player])`
+
+Returns `true` if the specified button was just pressed or held long enough to trigger a repeat.
+If the `player` is not provided, it defaults to Player 1.
+
+This function emulates PICO-8's `btnp()` behavior with:
+- Initial delay of 15 frames before repeating
+- Repeat interval of 4 frames after the initial delay
+
+```lua
+if btnp(BUTTON_A) then
+  print("Player 1 just pressed A!")
+end
+
+if btnp(BUTTON_B, PLAYER_2) then
+  print("Player 2 just pressed B!")
 end
 ```
 
@@ -296,4 +315,6 @@ end
 2. Clear the screen with `cls()` at the start of each frame
 3. Keep functions small and focused
 4. Use meaningful variable names
-5. Comment your code for better readability 
+5. Comment your code for better readability
+6. Use `btnp()` instead of `btn()` when you need to detect button presses rather than held states
+7. Remember that `btnp()` has a built-in delay and repeat behavior, which is useful for menu navigation and text input 
