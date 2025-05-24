@@ -151,6 +151,13 @@ The Lu8 Mini Console provides several graphics functions for creating visual out
   vsync()  -- Synchronize with screen refresh
   ```
 
+- `delay(seconds)`: Wait for the specified number of seconds
+  ```lua
+  delay(1)  -- Wait for 1 second
+  delay(2)  -- Wait for 2 seconds
+  ```
+  > ⚠️ Only integer values are supported for the seconds parameter.
+
 ### Color Management
 - `setcolor(color)`: Set the current drawing color
   ```lua
