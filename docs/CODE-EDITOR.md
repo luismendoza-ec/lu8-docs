@@ -98,6 +98,17 @@ The editor supports the standard Lu8 program structure:
 - Direct execution
 - Error reporting
 
+### Error Highlighting
+
+The Lu8 Code Editor provides real-time error feedback with **line and column tracking** during compilation:
+
+* If a syntax or compilation error occurs, the editor highlights the exact line and column where the issue was detected.
+* Errors from both Lua and Assembly modes include precise source mapping.
+* Hovering over the red marker shows the error message.
+* The diagnostics system integrates with the Monaco Editor’s markers and decorations for seamless feedback.
+* Helps quickly identify and fix issues without running the program.
+
+
 ## Usage
 
 ### Basic Editing
