@@ -15,9 +15,11 @@ This documentation and the Lu8 Fantasy Console are original works created by Lui
 # Lu8 Input System Documentation
 
 ## Overview
-The Lu8 Input System is designed to mimic the NES (Nintendo Entertainment System) controller functionality, providing support for two players with a familiar input interface for retro-style games and applications.
+The Lu8 Input System provides support for both traditional NES-style controller input and mouse input, making it versatile for different types of games and applications.
 
 ## Hardware Emulation
+
+### NES-Style Controller Input
 The system emulates two 8-bit input registers similar to the NES controller, where each bit represents a specific button state for each player:
 
 ```
@@ -34,17 +36,41 @@ Bit Layout (0xFF11 Register - Player 2):
 └─────────┴─────────┴────────┴────────┴─────────┴──────────┴────────┴───────┘
 ```
 
+### Mouse Input
+The system provides three additional registers for mouse input:
+
+```
+Mouse Position and Button State:
+┌─────────────┬─────────────┬─────────────┐
+│ 0xFF16      │ 0xFF17      │ 0xFF18      │
+│ MOUSE_X     │ MOUSE_Y     │ MOUSE_BTN   │
+└─────────────┴─────────────┴─────────────┘
+
+Mouse Button Layout (0xFF18):
+┌─────────┬─────────┬────────┬────────┬─────────┬──────────┬────────┬───────┐
+│ Bit 7   │ Bit 6   │ Bit 5  │ Bit 4  │ Bit 3   │ Bit 2    │ Bit 1  │ Bit 0 │
+│ Unused  │ Unused  │ Unused │ Unused │ Unused  │ Unused   │ Middle │ Left  │
+└─────────┴─────────┴────────┴────────┴─────────┴──────────┴────────┴───────┘
+```
+
 ## Memory Mapping
-The input states are mapped to memory addresses:
+
+### Controller Input
 - Player 1: `0xFF10` (Read-only)
 - Player 2: `0xFF11` (Read-only)
 - Player 1 btnp: `0xFF12` (Read-only)
 - Player 2 btnp: `0xFF13` (Read-only)
-- Input Initial Delay: `0xFF14` (Read/Write) - Configures initial delay before repeating (in frames)
-- Input Repeat Interval: `0xFF15` (Read/Write) - Configures repeat interval after initial delay (in frames)
+- Input Initial Delay: `0xFF14` (Read/Write)
+- Input Repeat Interval: `0xFF15` (Read/Write)
+
+### Mouse Input
+- Mouse X Position: `0xFF16` (Read-only) - X coordinate (0-127)
+- Mouse Y Position: `0xFF17` (Read-only) - Y coordinate (0-127)
+- Mouse Buttons: `0xFF18` (Read-only) - Button state register
 
 ## Button Constants
-The following button masks are defined for easy access:
+
+### Controller Buttons
 ```c
 BUTTON_A      = 0x01  // Bit 0
 BUTTON_B      = 0x02  // Bit 1
@@ -54,6 +80,13 @@ BUTTON_UP     = 0x10  // Bit 4
 BUTTON_DOWN   = 0x20  // Bit 5
 BUTTON_LEFT   = 0x40  // Bit 6
 BUTTON_RIGHT  = 0x80  // Bit 7
+```
+
+### Mouse Buttons
+```c
+MOUSE_LEFT   = 0x01  // Bit 0
+MOUSE_MIDDLE = 0x02  // Bit 1
+MOUSE_RIGHT  = 0x04  // Bit 2
 ```
 
 ## Player Constants
@@ -186,6 +219,37 @@ Player 1 Controls:                    Player 2 Controls:
     JMP .game_loop
 ```
 
+### 1. Mouse Input Example
+```assembly
+; Read mouse position and draw a square
+    ; Read mouse state
+    MOV [0x8000], [0xFF16]  ; Mouse X
+    MOV [0x8001], [0xFF17]  ; Mouse Y
+    MOV [0x8002], [0xFF18]  ; Mouse buttons
+
+    ; Check left button (bit 0)
+    MOV [0x8004], [0x8002]
+    AND [0x8004], 1
+    CMP [0x8004], 1
+    JZ .set_red
+
+    ; Default: white
+    MOV [0x8003], 7
+    JMP .draw
+
+.set_red:
+    MOV [0x8003], 8
+
+.draw:
+    ; Draw filled rectangle at mouse position
+    SETCOLOR [0x8003]
+    MOV [0xD80A], [0x8000]  ; FRECT_X
+    MOV [0xD80B], [0x8001]  ; FRECT_Y
+    MOV [0xD80C], 4         ; FRECT_W
+    MOV [0xD80D], 4         ; FRECT_H
+    FILLRECT
+```
+
 ## Lua Scripting – Button Input with `btn()` and `btnp()`
 
 Lu8 supports two input checking functions from Lua scripts:
@@ -253,6 +317,7 @@ These functions abstract the bitmask logic and register reading behind a simple,
 
 ## Technical Details
 
+### Controller Input
 - Each player has their own 8-bit input register
 - Both registers are read-only from the VM perspective
 - Input states are updated every frame
@@ -268,8 +333,18 @@ These functions abstract the bitmask logic and register reading behind a simple,
   - Both values must be at least 1 frame
   - Values are reset to BIOS defaults on system reset
 
+### Mouse Input
+- Mouse coordinates are scaled to fit the 128x128 screen
+- X and Y positions are clamped to 0-127 range
+- Mouse button states are updated in real-time
+- Mouse input is only captured when the canvas has focus
+- Right-click context menu is automatically prevented
+- Mouse position is relative to the canvas element
+- Mouse input is synchronized with the frame rate (60 FPS)
+
 ## Limitations
 
+### Controller Input
 - Maximum of 2 players supported
 - No analog input support
 - No input buffering at the hardware level
@@ -277,4 +352,13 @@ These functions abstract the bitmask logic and register reading behind a simple,
 - No support for additional controller types
 - Input is only captured when the canvas has focus
 - No support for gamepad/controller input
-- Input timing configuration values must be at least 1 frame 
+- Input timing configuration values must be at least 1 frame
+
+### Mouse Input
+- Limited to 128x128 resolution
+- Only three mouse buttons supported (left, middle, right)
+- No support for mouse wheel
+- No support for additional mouse buttons
+- Mouse input is only captured when the canvas has focus
+- No support for absolute positioning devices
+- No support for touch input 
