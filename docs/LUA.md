@@ -217,6 +217,37 @@ setpal(3, 0, 255, 0)
   y = rnd() + 1      -- Use in expression
   ```
 
+### Bitwise Operations
+- `bitand(x, y)`: Performs a bitwise AND operation between two numbers
+  ```lua
+  result = bitand(5, 3)  -- Returns 1 (binary: 101 & 011 = 001)
+  ```
+
+- `bitor(x, y)`: Performs a bitwise OR operation between two numbers
+  ```lua
+  result = bitor(5, 3)   -- Returns 7 (binary: 101 | 011 = 111)
+  ```
+
+- `bitxor(x, y)`: Performs a bitwise XOR operation between two numbers
+  ```lua
+  result = bitxor(5, 3)  -- Returns 6 (binary: 101 ^ 011 = 110)
+  ```
+
+- `bitnot(x)`: Performs a bitwise NOT operation on a number
+  ```lua
+  result = bitnot(5)     -- Returns 250 (binary: ~00000101 = 11111010)
+  ```
+
+- `shl(x, n)`: Shifts a number left by specified number of bits
+  ```lua
+  result = shl(5, 2)     -- Returns 20 (binary: 101 << 2 = 10100)
+  ```
+
+- `shr(x, n)`: Shifts a number right by specified number of bits
+  ```lua
+  result = shr(5, 1)     -- Returns 2 (binary: 101 >> 1 = 10)
+  ```
+
 ## Input Functions
 
 Lu8 provides easy-to-use functions to check button states:
