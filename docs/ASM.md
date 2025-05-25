@@ -403,6 +403,21 @@ The LU8 assembly language is a custom low-level language designed for the LU8 Vi
   * `0xD813` (FCIRC_R): Radius
 * **Cycles**: 1
 
+#### `PGET` (0x8A)
+
+* Gets the color of a pixel at the position specified by RECT_X, RECT_Y and stores it in the destination address
+* **Usage**: `PGET [dest]`
+* **Registers**:
+  * `0xD806` (RECT_X): X coordinate to read
+  * `0xD807` (RECT_Y): Y coordinate to read
+* **Example**:
+  ```asm
+  MOV [0xD806], 64     ; Set X coordinate
+  MOV [0xD807], 64     ; Set Y coordinate
+  PGET [0x8000]        ; Store pixel color at (64,64) in memory
+  ```
+* **Cycles**: 1
+
 #### `RSTPAL` (0x88)
 
 * Restores the Lu8 default palette (inspired by PICO-8).

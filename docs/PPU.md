@@ -245,6 +245,7 @@ The following PPU operations are exposed as custom opcodes:
 | `FILLCIRCLE` | 0x87   | X/Y/R: `0xD811–0xD813`               | Draw filled circle                      |
 | `RSTPAL`     | 0x88   | None                                 | Reset palette to default                |
 | `DRAWCHAR`   | 0x89   | X: `0xD806`, Y: `0xD807`             | Draw character from font data           |
+| `PGET`       | 0x8A   | X: `0xD806`, Y: `0xD807`             | Get pixel color at (X, Y)               |
 
 These instructions are 1-byte opcodes executed directly by the virtual CPU. Values must be preloaded into the specified addresses.
 

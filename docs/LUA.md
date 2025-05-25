@@ -113,6 +113,11 @@ The Lu8 Mini Console provides several graphics functions for creating visual out
   pset(10, 20, 1)  -- Draw a pixel at (10,20) with color 1
   ```
 
+- `pget(x, y)`: Get the color of a pixel at coordinates (x,y)
+  ```lua
+  color = pget(10, 20)  -- Get color at (10,20)
+  ```
+
 - `line(x1, y1, x2, y2)`: Draw a line from (x1,y1) to (x2,y2)
   ```lua
   line(0, 0, 100, 100)  -- Draw a diagonal line

@@ -81,6 +81,7 @@ For example:
 - `FILLCIRCLE` (0x87): Fill circle using FCIRC_X/Y/R (0xD811-0xD813)
 - `RSTPAL` (0x88): Restore the Lu8 default palette (PICO-8 inspired)
 - `DRAWCHAR` (0x89): Draw character from font data
+- `PGET [dest]` (0x8A): Get pixel color at RECT_X/Y and store in destination address
 
 ### Frame Control
 - `VSYNC` (0xFE): Signal end of frame
