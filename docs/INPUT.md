@@ -103,14 +103,14 @@ MAX_PLAYERS = 2       // Total number of supported players
 ```
 Player 1 Controls:                    Player 2 Controls:
 ┌───────────────────────┐            ┌───────────────────────┐
-│     [↑]              │            │      [W]              │
-│  [←][↓][→]          │            │   [A][S][D]          │
-│                      │            │                      │
-│  [Z] = A Button      │            │  [F] = A Button      │
-│  [X] = B Button      │            │  [G] = B Button      │
-│                      │            │                      │
-│  [RShift] = Select   │            │  [LShift] = Select   │
-│  [Enter]  = Start    │            │  [T]     = Start     │
+│     [↑]               │            │      [W]              │
+│  [←][↓][→]            │            │   [A][S][D]           │
+│                       │            │                       │
+│  [Z] = A Button       │            │  [F] = A Button       │
+│  [X] = B Button       │            │  [G] = B Button       │
+│                       │            │                       │
+│  [RShift] = Select    │            │  [LShift] = Select    │
+│  [Enter]  = Start     │            │  [T]     = Start      │
 └───────────────────────┘            └───────────────────────┘
 ```
 

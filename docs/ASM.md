@@ -245,7 +245,7 @@ The LU8 assembly language is a custom low-level language designed for the LU8 Vi
   ```asm
   CMP [0x8000], [0x8001] ; Compare values
   JLE less_or_equal      ; Jump if first value <= second value
-```
+  ```
 * **Cycles**: 3
 
 ### Stack and Subroutine Instructions
@@ -449,7 +449,7 @@ CLS
 * **Note**: After `HALT` is called, the program stops and will not resume unless the VM is reset or restarted.
 
 ** Example **
-``àsm
+```asm
     ...
     VSYNC
     HALT
