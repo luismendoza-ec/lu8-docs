@@ -25,84 +25,130 @@ The LU8 memory system is organized into distinct sections, providing a structure
 ### Total Memory Space
 
 * **Size**: 64KB (`0x0000 - 0xFFFF`)
-* **Divided into**: 6 primary sections
+* **Divided into**: 4 primary sections + Flags & I/O
 
 ### Memory Sections
 
-#### 1. BIOS Section (4KB)
+#### 1. Code Section (32KB)
 
-* **Range**: `0x0000 - 0x0FFF`
-* **Purpose**: Stores system BIOS firmware
-* **Access**: Read / Execute only (Write protected)
-* **Notes**: 
-  - Loaded automatically on system reset
-  - Cannot be overwritten by programs
-  - Contains essential system routines
-  - Protected by memory protection system
-
-#### 2. Code Section (28KB)
-
-* **Range**: `0x1000 - 0x7FFF`
-* **Purpose**: Stores executable program instructions
+* **Range**: `0x0000 - 0x7FFF`
+* **Purpose**: Stores system BIOS firmware and executable program instructions
 * **Access**: Read / Execute
-* **Notes**:
-  - Programs are loaded starting at `0x1000`
-  - Space after BIOS for user programs
-  - Maximum program size is 28KB
+* **Subsections**:
+  - BIOS: `0x0000 - 0x0FFF` (4KB)
+  - Cart/Program: `0x1000 - 0x7FFF` (28KB)
 
-#### 3. Data Section (16KB)
+#### 2. Data Section (16KB)
 
 * **Range**: `0x8000 - 0xBFFF`
 * **Purpose**: General-purpose variable and data storage
 * **Access**: Read / Write
-* **Notes**:
-  - Used for program variables and game state
-  - Fully accessible for read/write operations
+* **Special Addresses**:
+  - Return Value Address: `0x800F` (Used for function return values)
 
-#### 4. Graphics & Audio Section (8KB)
+#### 3. Graphics Section (8KB)
 
 * **Range**: `0xC000 - 0xDFFF`
-* **Purpose**: Graphics memory (sprites, tiles, framebuffer), drawing registers, and APU audio channels
+* **Purpose**: Graphics memory and audio control
 * **Access**: Read / Write
-* **Notes**:
-  - Memory-mapped I/O for PPU and APU
-  - Direct access to framebuffer and control registers
+* **Subsections**:
+  - Sprite Data: `0xC000 - 0xC7FF`
+  - Tile Data: `0xC800 - 0xCFFF`
+  - Screen Buffer: `0xD000 - 0xD7FF`
+  - PPU Control: `0xD800 - 0xD81F`
+  - APU Base: `0xD820` (5 channels, 16 bytes each)
+  - Palette: `0xD850 - 0xD86F`
 
-#### 5. Stack Section (8KB)
+#### 4. Stack Section (8KB)
 
 * **Range**: `0xE000 - 0xFFFF`
-* **Purpose**: Function call stack, local variables, return addresses
-* **Access**: Read / Write (Stack grows downward)
-* **Notes**:
-  - Initialized at top (`0xFFFF`)
-  - Stack overflow and underflow are detected
-  - Used for subroutine calls and local variables
+* **Purpose**: Stack operations and system flags
+* **Access**: Read / Write
 
-#### 6. I/O Registers (256B)
+#### 5. Flags & I/O Section
 
-* **Range**: `0xFF00 - 0xFFFF`
-* **Purpose**: CPU status flags, input register, indirect VRAM access
-* **Access**: Memory-mapped I/O (Read / Write or Read-only)
-* **Notes**:
-  - Includes system flags and input registers
-  - Some registers are read-only (e.g., input)
-  - Used for system control and status
+* **CPU Flags**: `0xFF00 - 0xFF05`
+  - Zero Flag (ZF): `0xFF00`
+  - Negative Flag (NF): `0xFF01`
+  - Carry Flag (CF): `0xFF02`
+  - Overflow Flag (OF): `0xFF03`
+  - Greater Flag (GF): `0xFF04`
+  - Less Flag (LF): `0xFF05`
+
+* **Input Registers**: `0xFF10 - 0xFF18`
+  - Player 1 Input: `0xFF10`
+  - Player 2 Input: `0xFF11`
+  - Player 1 btnp: `0xFF12`
+  - Player 2 btnp: `0xFF13`
+  - Input Initial Delay: `0xFF14`
+  - Input Repeat Interval: `0xFF15`
+  - Mouse X Position: `0xFF16`
+  - Mouse Y Position: `0xFF17`
+  - Mouse Buttons: `0xFF18`
 
 ---
 
-## Graphics & Audio Memory Layout (within `0xC000` – `0xDFFF`)
+## Graphics & Audio Memory Layout (0xC000 - 0xDFFF)
 
-| Subsection                | Range             | Size  | Purpose                                               |
-|---------------------------|-------------------|-------|-------------------------------------------------------|
-| Sprite Data               | `0xC000`–`0xC7FF` | 2KB   | Sprite definitions                                    |
-| Tile Data                 | `0xC800`–`0xCFFF` | 2KB   | Tile definitions                                      |
-| Screen Buffer             | `0xD000`–`0xD7FF` | 2KB   | Framebuffer output                                    |
-| Drawing Control Registers | `0xD800`–`0xD81F` | 32B   | PPU drawing command registers                         |
-| APU Channel Registers     | `0xD820`–`0xD84F` | 48B   | Audio channel configuration                           |
-| Color Palette             | `0xD850`–`0xD88F` | 64B   | 16-color palette (48B used, 16B padding)              |
-| Font Memory               | `0xD890`–`0xDCFF` | 1136B | System font (896B used for 112 glyphs × 8 bytes)      |
-| Reserved Tables Area      | `0xDD00`–`0xDDFF` | 256B  | Scroll buffers, blending tables, or LUTs              |
-| Extended Reserved         | `0xDE00`–`0xDFFF` | 512B  | Reserved for future extensions or BIOS scratch space  |
+### Graphics Memory Map
+
+| Subsection                | Range             | Size  | Purpose                                |
+|--------------------------|-------------------|-------|----------------------------------------|
+| Sprite Data              | `0xC000`-`0xC7FF` | 2KB   | Sprite definitions                     |
+| Tile Data                | `0xC800`-`0xCFFF` | 2KB   | Tile definitions                       |
+| Screen Buffer            | `0xD000`-`0xD7FF` | 2KB   | Framebuffer output                     |
+| PPU Control Registers    | `0xD800`-`0xD81F` | 32B   | Drawing control registers              |
+| APU Channel Registers    | `0xD820`-`0xD84F` | 48B   | 5 audio channels × 16 bytes each       |
+| Color Palette            | `0xD850`-`0xD86F` | 32B   | Color palette data                     |
+
+### PPU Control Registers (0xD800 - 0xD81F)
+
+| Address    | Name        | Purpose                           |
+|------------|-------------|-----------------------------------|
+| `0xD800`   | `PPU_COLOR` | Current drawing color (0-15)      |
+| `0xD801`   | `PPU_BGCLR` | Background clear color            |
+| `0xD802`   | `LINE_X1`   | Line start X                      |
+| `0xD803`   | `LINE_Y1`   | Line start Y                      |
+| `0xD804`   | `LINE_X2`   | Line end X                        |
+| `0xD805`   | `LINE_Y2`   | Line end Y                        |
+| `0xD806`   | `RECT_X`    | Rectangle top-left X              |
+| `0xD807`   | `RECT_Y`    | Rectangle top-left Y              |
+| `0xD808`   | `RECT_W`    | Rectangle width                   |
+| `0xD809`   | `RECT_H`    | Rectangle height                  |
+| `0xD80A`   | `FRECT_X`   | Filled rectangle X                |
+| `0xD80B`   | `FRECT_Y`   | Filled rectangle Y                |
+| `0xD80C`   | `FRECT_W`   | Filled rectangle width            |
+| `0xD80D`   | `FRECT_H`   | Filled rectangle height           |
+| `0xD80E`   | `CIRC_X`    | Circle center X                   |
+| `0xD80F`   | `CIRC_Y`    | Circle center Y                   |
+| `0xD810`   | `CIRC_R`    | Circle radius                     |
+| `0xD811`   | `FCIRC_X`   | Filled circle center X            |
+| `0xD812`   | `FCIRC_Y`   | Filled circle center Y            |
+| `0xD813`   | `FCIRC_R`   | Filled circle radius              |
+| `0xD814`-`0xD81F` | Reserved | Reserved for future extensions    |
+
+### APU Channel Layout (0xD820 - 0xD84F)
+
+Each audio channel occupies 16 bytes, with 5 channels total:
+- Pulse 1: `0xD820`-`0xD82F`
+- Pulse 2: `0xD830`-`0xD83F`
+- Triangle: `0xD840`-`0xD84F`
+- Noise: `0xD850`-`0xD85F`
+- DMC: `0xD860`-`0xD86F`
+
+Channel Register Offsets:
+- `+0`: Control
+- `+1`: Volume
+- `+2`: Sweep
+- `+3`: Frequency (Low)
+- `+4`: Frequency (High)
+- `+5`: Duty
+- `+6`: Length
+- `+7`: Phase
+- `+8`: Sample (DMC only)
+- `+9`: Rate (DMC only)
+- `+10`: Loop (DMC only)
+- `+11`-`+15`: Reserved
 
 ---
 
